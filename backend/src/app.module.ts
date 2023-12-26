@@ -15,9 +15,7 @@ import { MongooseModule } from '@nestjs/mongoose';
     HotelModule,
     ReservationModule,
     SupportRequestModule,
-    MongooseModule.forRoot(process.env.MONDO_DB),
+    MongooseModule.forRoot(process.env.MONGO_DB),
   ],
-  controllers: [],
-  providers: [],
 })
 export class AppModule {}
