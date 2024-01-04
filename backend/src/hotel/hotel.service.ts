@@ -1,29 +1,36 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import {
   IHotelService,
   SearchHotelParams,
   UpdateHotelParams,
 } from './hotel.interface';
 import { InjectModel } from '@nestjs/mongoose';
-import { ObjectId } from 'mongoose';
-import { Hotel } from 'src/mongo/schemas/hotel.schema';
+import { Model, ObjectId } from 'mongoose';
+import { Hotel, HotelDocument } from 'src/mongo/schemas/hotel.schema';
 
 @Injectable()
 export class HotelService implements IHotelService {
   constructor(
-    @InjectModel('Hotel') private readonly hotelModel,
-    @InjectModel('HotelRoom') private readonly hotelRoom,
+    @InjectModel('Hotel') private readonly hotelModel: Model<HotelDocument>,
   ) {}
-  create(data: any): Promise<Hotel> {
-    throw new Error('Method not implemented.');
+  find(data: SearchHotelParams): Promise<Hotel[]> {
+    return this.hotelModel
+      .find(data.params)
+      .skip(data.offset)
+      .limit(data.limit)
+      .exec();
   }
   findById(id: ObjectId): Promise<Hotel> {
-    throw new Error('Method not implemented.');
+    return this.hotelModel.findById(id).exec();
   }
-  search(params: SearchHotelParams): Promise<Hotel[]> {
-    throw new Error('Method not implemented.');
+  create({ name, description }: Partial<Hotel>): Promise<any> {
+    if (!name) throw new HttpException('Name is required', 400);
+    return new this.hotelModel({ name, description }).save();
   }
-  update(id: ObjectId, data: UpdateHotelParams): Promise<Hotel> {
-    throw new Error('Method not implemented.');
+  update(data: UpdateHotelParams): Promise<Hotel> {
+    return this.hotelModel.findByIdAndUpdate(data.id, data.params).exec();
+  }
+  delete(id: ObjectId): Promise<any> {
+    return this.hotelModel.findByIdAndDelete(id).exec();
   }
 }

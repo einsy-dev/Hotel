@@ -1,7 +1,21 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  UseInterceptors,
+} from '@nestjs/common';
 import { HotelService } from './hotel.service';
-import { SearchRoomsParams } from './hotel.interface';
 import { HotelRoomService } from './hotel.room.servise';
+import { ObjectId } from 'mongoose';
+import { SearchRoomsParams } from './hotel.room.interface';
+import { Hotel } from 'src/mongo/schemas/hotel.schema';
+import { HotelRoom } from 'src/mongo/schemas/hotel.room.schema';
+import { NoFilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('api')
 export class HotelController {
@@ -10,17 +24,58 @@ export class HotelController {
     private readonly roomService: HotelRoomService,
   ) {}
 
-  @Get('common/hotel-rooms')
-  async getHotelRooms(@Query() query: SearchRoomsParams) {
-    return this.hotelService.getHotelRooms(query);
+  // Hotel
+  @Get('hotels')
+  async getHotels(@Query() query: any) {
+    return this.hotelService.find(query);
   }
-  @Get('common/hotel-rooms/:id')
-  async getHotelRoom(@Param() { id }: { id: string }) {
-    return this.hotelService.getHotelRoom(id);
+  @Get('hotel/:id')
+  async getHotel(@Param() { id }: { id: ObjectId }) {
+    return this.hotelService.findById(id);
+  }
+  @Post('hotel')
+  @UseInterceptors(NoFilesInterceptor())
+  async create(@Body() data: Partial<Hotel>) {
+    return await this.hotelService.create(data);
+  }
+  @Put('hotel/:id')
+  @UseInterceptors(NoFilesInterceptor())
+  async update(
+    @Param() { id }: { id: ObjectId },
+    @Body() data: Partial<Hotel>,
+  ) {
+    return this.hotelService.update({ id, params: data });
+  }
+  @Delete('hotel/:id')
+  async delete(@Param() { id }: { id: ObjectId }) {
+    return this.hotelService.delete(id);
   }
 
-  @Post('admin/hotels')
-  async create(@Body() data: any) {
-    return this.hotelService.create(data);
+  // Hotel-room
+  @Get('rooms')
+  async getHotelRooms(@Query() query: SearchRoomsParams) {
+    return this.roomService.find(query);
+  }
+  @Get('room/:id')
+  async getHotelRoom(@Param() { id }: { id: ObjectId }) {
+    return this.roomService.findById(id);
+  }
+
+  @Post('room')
+  async createRoom(@Body() data: Partial<HotelRoom>) {
+    return this.roomService.create(data);
+  }
+
+  @Put('room/:id')
+  async updateRoom(
+    @Param() { id }: { id: ObjectId },
+    @Body() data: Partial<HotelRoom>,
+  ) {
+    return this.roomService.update({ id, params: data });
+  }
+
+  @Delete('room/:id')
+  async deleteRoom(@Param() { id }: { id: ObjectId }) {
+    return this.roomService.delete(id);
   }
 }

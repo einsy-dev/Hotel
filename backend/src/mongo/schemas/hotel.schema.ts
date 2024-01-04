@@ -1,6 +1,5 @@
 import { Schema, SchemaFactory, Prop } from '@nestjs/mongoose';
-import mongoose, { Document } from 'mongoose';
-import { ReviewDocument } from './review.schema';
+import { Document } from 'mongoose';
 
 export type HotelDocument = Hotel & Document;
 @Schema()
@@ -11,13 +10,10 @@ export class Hotel {
   @Prop()
   description: string;
 
-  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'Review' })
-  rating: ReviewDocument[];
-
-  @Prop({ required: true })
+  @Prop({ required: true, default: Date.now() })
   createdAt: Date;
 
-  @Prop({ required: true })
+  @Prop({ required: true, default: Date.now() })
   updatedAt: Date;
 }
 
