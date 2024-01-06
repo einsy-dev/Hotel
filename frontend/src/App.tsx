@@ -1,14 +1,14 @@
-import { useState } from "react";
-import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
+import Calendar from "./components/calendar";
 
 function App() {
-  let [count, setCount] = useState(0);
-
   return (
-    <Button variant="primary" onClick={() => setCount(count++)}>
-      {count}
-    </Button>
+    <Container
+      className="bg-light border border-dark"
+      style={{ minHeight: "100vh" }}
+    >
+      <Calendar />
+    </Container>
   );
 }
-
 export default App;
