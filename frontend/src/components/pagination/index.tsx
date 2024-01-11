@@ -1,38 +1,41 @@
-/*
 import { useEffect, useState } from "react";
 
-export default function Pagination({ pageState, limitPage, activePage }) {
-  const [active, setActive] = useState(activePage);
+export default function Pagination({
+  limitPage,
+  activePage,
+}: {
+  limitPage: number;
+  activePage: number;
+}) {
+  /* const { store } = useContext(Context); */
   const [result, setResult] = useState([]);
-  const pages = Array.from({ length: limitPage }, (_, i) => i + 1);
+  const pages: any = Array.from({ length: limitPage }, (_, i) => i + 1);
 
-  const handleClick = (i) => {
-    pageState(i);
-    setActive(i);
+  const handleClick = (i: number) => {
+    /* store.page = i; */
     document.documentElement.scrollTop = 0;
-    localStorage.setItem("page", JSON.stringify(i));
   };
 
   useEffect(() => {
     if (limitPage <= 5) {
       setResult(pages.slice(0, limitPage));
-    } else if (active <= 2) {
+    } else if (activePage <= 2) {
       setResult(pages.slice(0, 5));
-    } else if (active >= limitPage - 2) {
+    } else if (activePage >= limitPage - 2) {
       setResult(pages.slice(limitPage - 5, limitPage));
     } else {
-      setResult(pages.slice(active - 3, active + 2));
+      setResult(pages.slice(activePage - 3, activePage + 2));
     }
-  }, [active, limitPage]);
+  }, [activePage, limitPage]);
 
   return (
-    <div className="mt-auto w-100 d-flex justify-content-center">
+    <div className="mt-4 w-100 d-flex justify-content-center">
       <nav>
         <ul className="pagination">
           <li className="page-item">
             <button
-              className={active === 1 ? "page-link disabled" : "page-link"}
-              onClick={() => handleClick(active - 1)}
+              className={activePage === 1 ? "page-link disabled" : "page-link"}
+              onClick={() => handleClick(activePage - 1)}
             >
               <span aria-hidden="true">&laquo;</span>
             </button>
@@ -40,7 +43,7 @@ export default function Pagination({ pageState, limitPage, activePage }) {
           {result?.map((el, id) => (
             <li className="page-item" key={id}>
               <button
-                className={active === el ? "page-link active" : "page-link"}
+                className={activePage === el ? "page-link active" : "page-link"}
                 onClick={() => handleClick(el)}
               >
                 {el}
@@ -50,9 +53,9 @@ export default function Pagination({ pageState, limitPage, activePage }) {
           <li className="page-item">
             <button
               className={
-                active === limitPage ? "page-link disabled" : "page-link"
+                activePage === limitPage ? "page-link disabled" : "page-link"
               }
-              onClick={() => handleClick(active + 1)}
+              onClick={() => handleClick(activePage + 1)}
             >
               <span aria-hidden="true">&raquo;</span>
             </button>
@@ -62,5 +65,3 @@ export default function Pagination({ pageState, limitPage, activePage }) {
     </div>
   );
 }
- */
-export {};

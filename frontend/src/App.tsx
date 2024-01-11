@@ -1,11 +1,11 @@
-import Container from "react-bootstrap/Container";
-import Calendar from "./components/calendar";
+import { HashRouter } from "react-router-dom";
+import AppRouter from "./routes/app.router";
 
 function App() {
   return (
-    <Container style={{ minHeight: "100vh" }}>
-      <Calendar />
-    </Container>
+    <HashRouter>
+      <AppRouter />
+    </HashRouter>
   );
 }
 export default App;
