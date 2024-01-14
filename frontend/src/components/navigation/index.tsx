@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 export default function Navigation() {
   return (
     <nav className="w-25">
-      <ListGroup as="ol" className="rounded-4">
+      <ListGroup as="ol" className="rounded-4 shadow">
         <ListGroup.Item as="li">
           <NavLink to="/" className="text-decoration-none text-black">
             {">"} Все гостиницы
