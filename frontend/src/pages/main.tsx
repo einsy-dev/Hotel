@@ -13,7 +13,7 @@ export default function Main() {
     <>
       <div className="bg-light">
         <Container className="d-flex flex-column">
-          <header className="d-flex my-4">
+          <header className="d-flex mt-4">
             <NavLink
               to="/"
               className="text-decoration-none w-25 bg-primary text-white py-4 text-center rounded-4 shadow"
@@ -33,17 +33,46 @@ export default function Main() {
           </header>
 
           <main className="d-flex">
-            <Navigation />
-            <div className="d-flex flex-column w-50 ms-4 ">
-              <Calendar />
-              <div className="mt-4 d-flex flex-wrap justify-content-center">
-                <RoomCard img="fff" title="mein" description="lol" id="dd" />
-                <RoomCard img="fff" title="mein" description="lol" id="dd" />
-                <RoomCard img="fff" title="mein" description="lol" id="dd" />
-                <RoomCard img="fff" title="mein" description="lol" id="dd" />
-                <RoomCard img="fff" title="mein" description="lol" id="dd" />
+            <nav className="w-25">
+              <Navigation />
+              <Navigation />
+            </nav>
 
-                <Pagination limitPage={5} activePage={3} />
+            <div className="d-flex flex-column w-50 ms-4  mt-4">
+              <Calendar />
+              <div className="d-flex flex-wrap justify-content-center">
+                <RoomCard
+                  img="https://i.pinimg.com/736x/a5/27/7a/a5277abdcbfce15780f4fc587ca172ab.jpg"
+                  title="mein"
+                  description="lol"
+                  id="dd"
+                />
+                <RoomCard
+                  img="https://i.pinimg.com/736x/a5/27/7a/a5277abdcbfce15780f4fc587ca172ab.jpg"
+                  title="mein"
+                  description="lol"
+                  id="dd"
+                />
+                <RoomCard
+                  img="https://i.pinimg.com/736x/a5/27/7a/a5277abdcbfce15780f4fc587ca172ab.jpg"
+                  title="mein"
+                  description="lol"
+                  id="dd"
+                />
+                <RoomCard
+                  img="https://i.pinimg.com/736x/a5/27/7a/a5277abdcbfce15780f4fc587ca172ab.jpg"
+                  title="mein"
+                  description="lol"
+                  id="dd"
+                />
+                <RoomCard
+                  img="https://i.pinimg.com/736x/a5/27/7a/a5277abdcbfce15780f4fc587ca172ab.jpg"
+                  title="mein"
+                  description="lol"
+                  id="dd"
+                />
+
+                <Pagination limitPage={8} activePage={7} />
               </div>
             </div>
           </main>
