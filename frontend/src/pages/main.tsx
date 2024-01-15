@@ -9,6 +9,7 @@ import { useState } from "react";
 
 export default function Main() {
   const [modalShow, setModalShow] = useState(false);
+  const [login, setLogin] = useState(false);
   return (
     <>
       <div className="bg-light">
@@ -24,11 +25,28 @@ export default function Main() {
             <div className="ms-4 p-3 bg-white text-decoration-none w-50 text-end rounded-4 shadow">
               <div
                 className="btn text-primary"
-                onClick={() => setModalShow(true)}
+                onClick={() => {
+                  setModalShow(true);
+                  setLogin(true);
+                }}
               >
                 Войти
               </div>
-              <Auth show={modalShow} onHide={() => setModalShow(false)} />
+
+              <div
+                className="btn text-primary"
+                onClick={() => {
+                  setModalShow(true);
+                  setLogin(false);
+                }}
+              >
+                Регистрация
+              </div>
+              <Auth
+                show={modalShow}
+                onHide={() => setModalShow(false)}
+                login={login}
+              />
             </div>
           </header>
 
