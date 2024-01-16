@@ -1,47 +1,25 @@
-import { $host, $authHost } from './index';
-
+import { $host, $authHost } from "./index";
 
 export const authUser = async () => {
-    const { data } = await $authHost.get('/user/auth');
-    return data;
-}
+  const { data } = await $authHost.get("/auth");
+  return data;
+};
 
-export const loginUser = async (email: any, password: any) => {
-    const { data } = await $host.post('/user/login', { email, password })
-    return data
-}
-export const registerUser = async (name: any, email: any, password: any) => {
-    const { data } = await $host.post('/user/register', { name, email, password })
-    return data
-}
-
-export const wishList = async (arr: any) => {
-    const { data } = await $authHost.post('/user/wishlist', { arr })
-    return data
-}
-
-export const getWishList = async () => {
-    const { data } = await $authHost.get('/user/wishlist')
-    return data
-}
-
-export const basket = async (arr: any) => {
-    const { data } = await $authHost.post('/user/basket', { arr })
-    return data
-}
-
-export const getBasket = async () => {
-    const { data } = await $authHost.get('/user/basket')
-    return data
-}
-
-export const order = async (info: any) => {
-    const { data } = await $authHost.post('/user/order', { info })
-    return data
-}
-
-export const orders = async () => {
-    const { data } = await $authHost.get('/user/orders')
-    return data
-}
-
+export const signInUser = async (email: string, password: string) => {
+  const { data } = await $host.post("/auth/signin", { email, password });
+  return data;
+};
+export const signUpUser = async (
+  name: string,
+  email: string,
+  password: string,
+  phone: string
+) => {
+  const { data } = await $host.post("/auth/signup", {
+    name,
+    email,
+    password,
+    phone,
+  });
+  return data;
+};

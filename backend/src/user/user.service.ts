@@ -11,10 +11,17 @@ export class UserService {
   ) {}
 
   async findOne(payload: any) {
+    const { valid, ...rest } = payload;
     const user = await this.user
-      .findOne(payload)
-      .select(['_id', 'name', 'email', 'phone', 'role']);
-    console.log(user);
+      .findOne(rest)
+      .select([
+        '_id',
+        'name',
+        'email',
+        'phone',
+        'role',
+        `${valid && 'password'}`,
+      ]);
     return user;
   }
 

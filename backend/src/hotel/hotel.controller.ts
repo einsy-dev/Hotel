@@ -16,6 +16,7 @@ import { SearchRoomsParams } from './hotel.room.interface';
 import { Hotel } from 'src/mongo/schemas/hotel.schema';
 import { HotelRoom } from 'src/mongo/schemas/hotel.room.schema';
 import { NoFilesInterceptor } from '@nestjs/platform-express';
+import { SearchHotelParams } from './hotel.interface';
 
 @Controller('api')
 export class HotelController {
@@ -26,7 +27,8 @@ export class HotelController {
 
   // Hotel
   @Get('hotels')
-  async getHotels(@Query() query: any) {
+  async getHotels(@Query() query: SearchHotelParams) {
+    console.log(query);
     return this.hotelService.find(query);
   }
   @Get('hotel/:id')

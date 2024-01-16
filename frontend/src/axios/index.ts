@@ -1,12 +1,13 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 
 export const $host = axios.create({
-  baseURL: "import.meta.env.VITE_REACT_APP_URL_API",
+  baseURL: process.env.REACT_APP_SERVER_API,
 });
 
 export const $authHost = axios.create({
-  baseURL: "import.meta.env.VITE_REACT_APP_URL_API",
+  baseURL: process.env.REACT_APP_SERVER_API,
   headers: {
-    authorization: `Bearer ${localStorage.getItem("token")}`,
+    authorization: `Bearer ${Cookies.get("token")}`,
   },
 });

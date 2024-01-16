@@ -5,17 +5,18 @@ import {
   Get,
   Post,
   UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { NoFilesInterceptor } from '@nestjs/platform-express';
-import { Roles } from './roles.decorator';
+import { JwtAuthGuard } from './jwt.auth.guard';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get()
-  @Roles(['client'])
   async validate(@Request() req: any) {
     return {
       user: req.user,

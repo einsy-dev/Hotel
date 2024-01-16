@@ -13,24 +13,24 @@ export class HotelService implements IHotelService {
   constructor(
     @InjectModel('Hotel') private readonly hotelModel: Model<HotelDocument>,
   ) {}
-  find(data: SearchHotelParams): Promise<Hotel[]> {
-    return this.hotelModel
+  async find(data: SearchHotelParams): Promise<Hotel[]> {
+    return await this.hotelModel
       .find(data.params)
       .skip(data.offset)
       .limit(data.limit)
       .exec();
   }
-  findById(id: ObjectId): Promise<Hotel> {
-    return this.hotelModel.findById(id).exec();
+  async findById(id: ObjectId): Promise<Hotel> {
+    return await this.hotelModel.findById(id).exec();
   }
-  create({ name, description }: Partial<Hotel>): Promise<any> {
+  async create({ name, description }: Partial<Hotel>): Promise<any> {
     if (!name) throw new HttpException('Name is required', 400);
-    return new this.hotelModel({ name, description }).save();
+    return await new this.hotelModel({ name, description }).save();
   }
-  update(data: UpdateHotelParams): Promise<Hotel> {
-    return this.hotelModel.findByIdAndUpdate(data.id, data.params).exec();
+  async update(data: UpdateHotelParams): Promise<Hotel> {
+    return await this.hotelModel.findByIdAndUpdate(data.id, data.params).exec();
   }
-  delete(id: ObjectId): Promise<any> {
-    return this.hotelModel.findByIdAndDelete(id).exec();
+  async delete(id: ObjectId): Promise<any> {
+    return await this.hotelModel.findByIdAndDelete(id).exec();
   }
 }

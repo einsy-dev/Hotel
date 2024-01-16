@@ -3,6 +3,8 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
 import Modal from "react-bootstrap/Modal";
+import { signInUser, signUpUser } from "../axios/userApi";
+import Cookies from "js-cookie";
 
 type TData = {
   name: string;
@@ -28,6 +30,17 @@ export default function Auth({
   });
   function sendData(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (login) {
+      signInUser(data.email, data.password)
+        .then((data) => Cookies.set("token", data.access_token))
+        .finally(() => document.location.reload())
+        .catch(() => console.log("Ошибка входа"));
+    } else {
+      signUpUser(data.name, data.email, data.password, data.phone)
+        .then((data) => Cookies.set("token", data.access_token))
+        .finally(() => document.location.reload())
+        .catch(() => console.log("Ошибка регистрации"));
+    }
   }
 
   function changeData(e: React.ChangeEvent<HTMLInputElement>) {

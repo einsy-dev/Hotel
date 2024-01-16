@@ -4,7 +4,7 @@ import { Hotel } from 'src/mongo/schemas/hotel.schema';
 interface SearchHotelParams {
   limit: number;
   offset: number;
-  params: Partial<Hotel>;
+  name: string;
 }
 
 interface UpdateHotelParams {
