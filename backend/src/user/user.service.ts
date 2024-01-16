@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserDocument } from 'src/mongo/schemas/user.schema';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -10,15 +11,25 @@ export class UserService {
   ) {}
 
   async findOne(payload: any) {
-    return await this.user.findOne(payload);
+    const user = await this.user
+      .findOne(payload)
+      .select(['_id', 'name', 'email', 'phone', 'role']);
+    console.log(user);
+    return user;
   }
 
   async findAll() {
     return await this.user.find();
   }
 
-  async create(payload: any) {
-    return await this.user.create(payload);
+  async create({ name, email, password, phone }: any) {
+    const hashPassword = await bcrypt.hash(password, 5);
+    return await this.user.create({
+      name,
+      email,
+      password: hashPassword,
+      phone,
+    });
   }
 
   async update(payload: any) {

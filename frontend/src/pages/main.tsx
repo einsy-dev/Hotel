@@ -53,7 +53,6 @@ export default function Main() {
           <main className="d-flex">
             <nav className="w-25">
               <Navigation />
-              <Navigation />
             </nav>
 
             <div className="d-flex flex-column w-50 ms-4  mt-4">
