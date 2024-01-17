@@ -3,16 +3,17 @@ import { useEffect, useState } from "react";
 export default function Pagination({
   limitPage,
   activePage,
+  setPage,
 }: {
   limitPage: number;
   activePage: number;
+  setPage: any;
 }) {
-  /* const { store } = useContext(Context); */
   const [result, setResult] = useState([]);
   const pages: any = Array.from({ length: limitPage }, (_, i) => i + 1);
 
   const handleClick = (i: number) => {
-    /* store.page = i; */
+    setPage(i);
     document.documentElement.scrollTop = 0;
   };
 

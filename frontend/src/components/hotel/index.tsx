@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 
-export default function RoomCard({
+export default function HotelCard({
   img,
   title,
   description,
@@ -25,7 +25,10 @@ export default function RoomCard({
       <div className="card-body ">
         <h5 className="card-title">{title}</h5>
         <p className="card-text h-50 mt-4">{description}</p>
-        <NavLink to={"/" + id} className="btn btn-primary position-absolute bottom-0 end-0 m-4">
+        <NavLink
+          to={"/" + id}
+          className="btn btn-primary position-absolute bottom-0 end-0 m-4"
+        >
           Подробнее
         </NavLink>
       </div>

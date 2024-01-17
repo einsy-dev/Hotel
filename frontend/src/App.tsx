@@ -6,7 +6,7 @@ import LoginRegister from "./components/login.register";
 
 function App() {
   return (
-    <div className="bg-light vh-100">
+    <div className="bg-light" style={{minHeight: "100vh"}}>
       <Container className="d-flex flex-column">
         <header className="d-flex my-4">
           <NavLink

@@ -1,16 +1,29 @@
 import { useState } from "react";
-import moment from "moment";
+import { splitArr } from "../../utils/split.array";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
-import { CalendarRender } from "./calendar.render";
+import Row from "react-bootstrap/Row";
+import moment from "moment";
 
-export default function Calendar() {
+export default function Calendar({
+  order,
+  setOrder,
+}: {
+  order: any;
+  setOrder: any;
+}) {
   const [date, setDate] = useState(moment().startOf("month"));
-  const [order, setOrder] = useState({});
+  const start = date.clone().startOf("month").day();
+  const days = date.clone().daysInMonth();
+
+  const dayOfWeek = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+  const emptyArr = new Array(start).fill("");
+  const daysArr = Array.from({ length: days }, (_, i) => i + 1);
+
+  const arr = splitArr(emptyArr.concat(daysArr), 7, dayOfWeek);
 
   return (
-    <Container className="bg-white rounded-4 shadow p-4">
-      <span className="text-center fs-3 w-100 d-block">Поиск гостиницы</span>
+    <>
       <div className="p-3 d-flex justify-content-between w-50 m-auto">
         <Button
           variant="secondary"
@@ -18,7 +31,9 @@ export default function Calendar() {
         >
           {"<<"}
         </Button>
-        <div className="align-self-center">{date.format("MMMM YYYY")}</div>
+        <div className="align-self-center">
+          {date.clone().format("MMMM YYYY")}
+        </div>
         <Button
           variant="secondary"
           onClick={() => setDate((prev) => prev.clone().add(1, "M"))}
@@ -26,7 +41,43 @@ export default function Calendar() {
           {">>"}
         </Button>
       </div>
-      <CalendarRender date={date.clone()} setOrder={setOrder} order={order} />
-    </Container>
+      <Container style={{ width: "max-content" }}>
+        {arr.map((el, id) => (
+          <Row key={id}>
+            {el.map((i, index) => (
+              <Button
+                key={index}
+                style={{ width: "50px", height: "50px" }}
+                className="d-flex justify-content-center align-items-center col-auto m-1"
+                variant="outline-primary"
+                {...(Number(i) && {
+                  active:
+                    date.clone().set("D", i).isSameOrAfter(order.from) &&
+                    date.clone().set("D", i).isSameOrBefore(order.to),
+                  onClick: () => {
+                    setOrder((prev: any) => {
+                      let result = { ...prev };
+                      let dateSet = date.clone().set("D", i);
+                      if (prev.from && prev.to && prev.from.isSame(prev.to)) {
+                        if (dateSet.isAfter(prev.from)) {
+                          result.to = dateSet;
+                        } else if (dateSet.isBefore(prev.from)) {
+                          result.from = dateSet;
+                        }
+                      } else {
+                        result = { from: dateSet, to: dateSet };
+                      }
+                      return result;
+                    });
+                  },
+                })}
+              >
+                {i}
+              </Button>
+            ))}
+          </Row>
+        ))}
+      </Container>
+    </>
   );
 }
