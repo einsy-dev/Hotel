@@ -5,6 +5,9 @@ export type HotelDocument = Hotel & Document;
 @Schema()
 export class Hotel {
   @Prop({ required: true })
+  images: string[];
+
+  @Prop({ required: true })
   name: string;
 
   @Prop()

@@ -23,9 +23,17 @@ export class HotelService implements IHotelService {
   async findById(id: ObjectId): Promise<Hotel> {
     return await this.hotelModel.findById(id).exec();
   }
-  async create({ name, description }: Partial<Hotel>): Promise<any> {
+  async create(body: Partial<Hotel>, files: any): Promise<any> {
+    const { name, description } = body;
+
+    if (!files) {
+      throw new HttpException('Images is required', 400);
+    }
+
     if (!name) throw new HttpException('Name is required', 400);
-    return await new this.hotelModel({ name, description }).save();
+
+    const images = files.map((file) => file.filename);
+    return await new this.hotelModel({ images, name, description }).save();
   }
   async update(data: UpdateHotelParams): Promise<Hotel> {
     return await this.hotelModel.findByIdAndUpdate(data.id, data.params).exec();

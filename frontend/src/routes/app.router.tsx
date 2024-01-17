@@ -1,11 +1,12 @@
 import { Route, Routes } from "react-router-dom";
 import Main from "../pages/main";
-import Hotel from "../pages/hotel";
+import CreateHotel from "../pages/hotel";
 
 const AppRouter = () => (
   <Routes>
     <Route path="/" element={<Main />} />
-    <Route path="/hotel" element={<Hotel />} />
+    <Route path="/hotel/:id" element={<Main />} />
+    <Route path="/hotel/create" element={<CreateHotel />} />
   </Routes>
 );
 

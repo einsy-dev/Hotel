@@ -7,6 +7,7 @@ import {
   Post,
   Put,
   Query,
+  UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
 import { HotelService } from './hotel.service';
@@ -15,8 +16,10 @@ import { ObjectId } from 'mongoose';
 import { SearchRoomsParams } from './hotel.room.interface';
 import { Hotel } from 'src/mongo/schemas/hotel.schema';
 import { HotelRoom } from 'src/mongo/schemas/hotel.room.schema';
-import { NoFilesInterceptor } from '@nestjs/platform-express';
+import { FilesInterceptor, NoFilesInterceptor } from '@nestjs/platform-express';
 import { SearchHotelParams } from './hotel.interface';
+import { diskStorage } from 'multer';
+import * as uuid from 'uuid';
 
 @Controller('api')
 export class HotelController {
@@ -35,9 +38,22 @@ export class HotelController {
     return this.hotelService.findById(id);
   }
   @Post('hotel')
-  @UseInterceptors(NoFilesInterceptor())
-  async create(@Body() data: Partial<Hotel>) {
-    return await this.hotelService.create(data);
+  @UseInterceptors(
+    FilesInterceptor('files', 20, {
+      storage: diskStorage({
+        destination: './public/images',
+        filename: (req, file, callback) => {
+          const filename: string = uuid.v4() + '.jpg';
+          callback(null, filename);
+        },
+      }),
+    }),
+  )
+  async create(
+    @Body() body: Partial<Hotel>,
+    @UploadedFiles() files: any,
+  ): Promise<any> {
+    return await this.hotelService.create(body, files);
   }
   @Put('hotel/:id')
   @UseInterceptors(NoFilesInterceptor())

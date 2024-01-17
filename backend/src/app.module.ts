@@ -6,6 +6,8 @@ import { ReservationModule } from './reservation/reservation.module';
 import { SupportRequestModule } from './support-request/support-request.module';
 import { ConfigModule } from './config/config.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -16,6 +18,9 @@ import { MongooseModule } from '@nestjs/mongoose';
     ReservationModule,
     SupportRequestModule,
     MongooseModule.forRoot(process.env.MONGO_DB),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', './public', 'images'),
+    }),
   ],
 })
 export class AppModule {}

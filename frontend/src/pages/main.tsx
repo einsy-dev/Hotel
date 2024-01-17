@@ -4,12 +4,13 @@ import Container from "react-bootstrap/Container";
 import Calendar from "../components/calendar";
 import { Button, Form, Spinner } from "react-bootstrap";
 import { getHotels } from "../axios/appApi";
-import RoomCard from "../components/hotel";
+import HotelCard from "../components/hotel/hotel.card";
 import Pagination from "../components/pagination";
 import useUpdateEffect from "../utils/hooks/use.update.effect";
 
 interface IHotel {
   _id: string;
+  images: string[];
   name: string;
   description: string;
 }
@@ -23,7 +24,6 @@ export default function HotelSearch() {
   const [searchState, setSearchState] = useState({
     name: "",
     limit: 10,
-    offset: 0,
   });
 
   function changeName(e: React.ChangeEvent<HTMLInputElement>) {
@@ -37,7 +37,8 @@ export default function HotelSearch() {
       alert("Выберите даты");
       return;
     }
-    const { name, limit, offset } = searchState;
+    const { name, limit } = searchState;
+    const offset = (activePage - 1) * limit;
     setShort(true);
     setLoading(true);
     getHotels(name, limit, offset)
@@ -95,8 +96,8 @@ export default function HotelSearch() {
         short && (
           <>
             {hotels.map((el) => (
-              <RoomCard
-                img="https://i.pinimg.com/736x/a5/27/7a/a5277abdcbfce15780f4fc587ca172ab.jpg"
+              <HotelCard
+                img={el.images[0]}
                 title={el.name}
                 description={el.description}
                 id={el._id}

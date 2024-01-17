@@ -11,12 +11,7 @@ export const getHotels = async (
   return data;
 };
 
-export const getOneCard = async (id: string) => {
-  const { data } = await $host.get("/store/" + id);
-  return data;
-};
-
-export const getCategory = async () => {
-  const { data } = await $host.get("/category");
+export const createHotel = async (formData: FormData) => {
+  const { data } = await $authHost.post("/api/hotel", formData);
   return data;
 };

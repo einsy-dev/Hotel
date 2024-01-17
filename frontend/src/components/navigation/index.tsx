@@ -7,12 +7,12 @@ export default function Navigation() {
 
   return (
     <ListGroup as="ol" className="rounded-4 shadow">
-      <MyLink path="/hotel" text="Все гостиницы" />
+      <MyLink path="/" text="Все гостиницы" />
       <MyLink path="/" text="Поиск Номеров" />
       {user && user.role === "admin" && (
         <>
-          <MyLink path="/" text="Добавить гостиницу" />
-          <MyLink path="/" text="Пользователи" />
+          <MyLink path="/hotel/create" text="Добавить гостиницу" />
+          <MyLink path="/users" text="Пользователи" />
         </>
       )}
     </ListGroup>
