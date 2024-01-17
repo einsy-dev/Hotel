@@ -28,7 +28,6 @@ export class HotelController {
   // Hotel
   @Get('hotels')
   async getHotels(@Query() query: SearchHotelParams) {
-    console.log(query);
     return this.hotelService.find(query);
   }
   @Get('hotel/:id')

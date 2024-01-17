@@ -15,7 +15,7 @@ export class HotelService implements IHotelService {
   ) {}
   async find(data: SearchHotelParams): Promise<Hotel[]> {
     return await this.hotelModel
-      .find(data.params)
+      .find({ name: RegExp(data.name, 'i') })
       .skip(data.offset)
       .limit(data.limit)
       .exec();
