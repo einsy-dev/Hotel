@@ -7,11 +7,11 @@ services:
     ports:
       - 3000:3000
     depends_on:
-      - counter
+      - server
   server:
     build: ./backend
     networks:
-      - internet - backend
+      - internet 
     ports:
       - 27017:3000
 networks:
