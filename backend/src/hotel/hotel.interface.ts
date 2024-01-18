@@ -13,7 +13,7 @@ interface UpdateHotelParams {
 }
 
 interface IHotelService {
-  find(data: SearchHotelParams): Promise<Hotel[]>;
+  find(data: SearchHotelParams): Promise<{ data: Hotel[]; limit: number }>;
   findById(id: ObjectId): Promise<Hotel>;
   create(data: Partial<Hotel>, files: any): Promise<Hotel>;
   update(data: UpdateHotelParams): Promise<Hotel>;

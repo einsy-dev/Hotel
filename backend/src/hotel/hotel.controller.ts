@@ -16,7 +16,7 @@ import { ObjectId } from 'mongoose';
 import { SearchRoomsParams } from './hotel.room.interface';
 import { Hotel } from 'src/mongo/schemas/hotel.schema';
 import { HotelRoom } from 'src/mongo/schemas/hotel.room.schema';
-import { FilesInterceptor, NoFilesInterceptor } from '@nestjs/platform-express';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { SearchHotelParams } from './hotel.interface';
 import { diskStorage } from 'multer';
 import * as uuid from 'uuid';
@@ -55,13 +55,31 @@ export class HotelController {
   ): Promise<any> {
     return await this.hotelService.create(body, files);
   }
+
   @Put('hotel/:id')
-  @UseInterceptors(NoFilesInterceptor())
+  @UseInterceptors(
+    FilesInterceptor('files', 20, {
+      storage: diskStorage({
+        destination: './public/images',
+        filename: (req, file, callback) => {
+          const filename: string = uuid.v4() + '.jpg';
+          callback(null, filename);
+        },
+      }),
+    }),
+  )
   async update(
+    @UploadedFiles() files: any,
     @Param() { id }: { id: ObjectId },
-    @Body() data: Partial<Hotel>,
+    @Body() body: Partial<Hotel>,
   ) {
-    return this.hotelService.update({ id, params: data });
+    body.images = Array.from(body.images).join('').split(',');
+
+    if (files) {
+      body.images = [...body.images, ...files.map((file) => file.filename)];
+    }
+
+    return this.hotelService.update({ id, params: body });
   }
   @Delete('hotel/:id')
   async delete(@Param() { id }: { id: ObjectId }) {
@@ -69,7 +87,7 @@ export class HotelController {
   }
 
   // Hotel-room
-  @Get('rooms')
+  @Get('rooms/:hotelId')
   async getHotelRooms(@Query() query: SearchRoomsParams) {
     return this.roomService.find(query);
   }
@@ -79,8 +97,22 @@ export class HotelController {
   }
 
   @Post('room')
-  async createRoom(@Body() data: Partial<HotelRoom>) {
-    return this.roomService.create(data);
+  @UseInterceptors(
+    FilesInterceptor('files', 20, {
+      storage: diskStorage({
+        destination: './public/images',
+        filename: (req, file, callback) => {
+          const filename: string = uuid.v4() + '.jpg';
+          callback(null, filename);
+        },
+      }),
+    }),
+  )
+  async createRoom(
+    @Body() body: Partial<Hotel>,
+    @UploadedFiles() files: any,
+  ): Promise<any> {
+    return await this.roomService.create(body, files);
   }
 
   @Put('room/:id')

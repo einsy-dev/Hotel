@@ -4,19 +4,19 @@ import { Date, Document, ObjectId } from 'mongoose';
 export type ReservationDocument = Reservation & Document;
 @Schema()
 export class Reservation {
-  @Prop({ required: true })
+  @Prop({ type: String, required: true })
   userId: ObjectId;
 
-  @Prop({ required: true })
+  @Prop({ type: String, required: true })
   hotelId: ObjectId;
 
-  @Prop({ required: true })
+  @Prop({ type: String, required: true })
   roomId: ObjectId;
 
-  @Prop({ required: true })
+  @Prop({ type: Date, required: true })
   dateStart: Date;
 
-  @Prop({ required: true })
+  @Prop({ type: Date, required: true })
   dateEnd: Date;
 }
 

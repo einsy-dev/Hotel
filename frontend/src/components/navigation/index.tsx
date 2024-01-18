@@ -3,12 +3,12 @@ import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 
 export default function Navigation() {
-  const { user } = useSelector((state: any) => state.user);
+  const user = useSelector((state: any) => state.user);
 
   return (
     <ListGroup as="ol" className="rounded-4 shadow">
-      <MyLink path="/" text="Все гостиницы" />
-      <MyLink path="/" text="Поиск Номеров" />
+      <MyLink path="/hotels" text="Все гостиницы" />
+      <MyLink path="/" text="Поиск" />
       {user && user.role === "admin" && (
         <>
           <MyLink path="/hotel/create" text="Добавить гостиницу" />

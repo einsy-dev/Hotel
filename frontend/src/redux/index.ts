@@ -8,7 +8,7 @@ const mainReducer: Reducer<any, any, never[]> = (
 
   switch (type) {
     case "AUTH":
-      return { ...prevState, user: payload };
+      return { ...prevState, user: payload.user };
     default:
       return prevState;
   }

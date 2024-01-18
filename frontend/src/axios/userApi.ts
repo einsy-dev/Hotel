@@ -23,3 +23,7 @@ export const signUpUser = async (
   });
   return data;
 };
+
+export const userReservations = async (id: string) => {
+  const { data } = await $authHost.get(`/user/${id}/reservations`);
+}

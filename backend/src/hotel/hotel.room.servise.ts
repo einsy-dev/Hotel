@@ -30,13 +30,17 @@ export class HotelRoomService implements IHotelRoomService {
     return this.hotelRoomModel.findById(id);
   }
 
-  create({
-    hotel,
-    description,
-    images,
-  }: Partial<HotelRoom>): Promise<HotelRoom> {
+  async create(body: Partial<HotelRoom>, files: any): Promise<any> {
+    const { hotel, description } = body;
+
+    if (!files) {
+      throw new HttpException('Images is required', 400);
+    }
+
     if (!hotel) throw new HttpException('Hotel is required', 400);
-    return new this.hotelRoomModel(hotel, description, images).save();
+
+    const images = files.map((file) => file.filename);
+    return await new this.hotelRoomModel({ images, description, hotel }).save();
   }
 
   update(data: UpdateRoomsParams): Promise<HotelRoom> {

@@ -1,4 +1,4 @@
-import Auth from "../../modal/auth";
+import Auth from "../modal/auth";
 import { useLayoutEffect, useState } from "react";
 import { authUser } from "../../axios/userApi";
 import { useDispatch } from "react-redux";
@@ -20,7 +20,7 @@ export default function LoginRegister() {
       .catch(() => {
         console.log("Авторизация не выполнена");
       });
-  });
+  }, []);
   return (
     <div className="ms-4 p-3 bg-white text-decoration-none w-50 text-end rounded-4 shadow">
       {!isAuth ? (

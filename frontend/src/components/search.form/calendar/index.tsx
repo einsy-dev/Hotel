@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { splitArr } from "../../utils/split.array";
+import { splitArr } from "../../../utils/split.array";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
@@ -58,14 +58,18 @@ export default function Calendar({
                     setOrder((prev: any) => {
                       let result = { ...prev };
                       let dateSet = date.clone().set("D", i);
-                      if (prev.from && prev.to && prev.from.isSame(prev.to)) {
-                        if (dateSet.isAfter(prev.from)) {
-                          result.to = dateSet;
-                        } else if (dateSet.isBefore(prev.from)) {
-                          result.from = dateSet;
+                      if (
+                        prev.order.from &&
+                        prev.order.to &&
+                        prev.order.from.isSame(prev.order.to)
+                      ) {
+                        if (dateSet.isAfter(prev.order.from)) {
+                          result.order.to = dateSet;
+                        } else if (dateSet.isBefore(prev.order.from)) {
+                          result.order.from = dateSet;
                         }
                       } else {
-                        result = { from: dateSet, to: dateSet };
+                        result.order = { from: dateSet, to: dateSet };
                       }
                       return result;
                     });

@@ -1,18 +1,25 @@
-import { Body, Controller, Delete, Get, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly usersService: UserService) {}
-
-  @Get()
-  async findOne(@Body() payload: any) {
-    return this.usersService.findOne(payload);
-  }
-
   @Get('all')
   async findAll() {
     return this.usersService.findAll();
+  }
+
+  @Get(':id')
+  async findOne(@Param() { id }: any) {
+    return this.usersService.findOne({ _id: id, valid: false });
   }
 
   @Post('create')
