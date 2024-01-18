@@ -1,18 +1,23 @@
 version: "1"
 services:
-  frontend:
-    image: node:latest
-    ports:
-      - 80:80
-    volumes:
-      - ./frontend:/app
-    command: npm start
-
-  backend:
-    image: node:latest
-    working_dir: /app
+  app:
+    build: ./frontend
+    networks:
+      - backend
     ports:
       - 3000:3000
-    volumes:
-      - ./backend:/app
-    command: npm start
+    depends_on:
+      - counter
+  server:
+    build: ./backend
+    networks:
+      - internet - backend
+    ports:
+      - 27017:3000
+networks:
+  backend:
+    name: backend
+    driver: bridge
+  internet:
+    name: internet
+    driver: bridge
