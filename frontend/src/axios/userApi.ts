@@ -24,6 +24,9 @@ export const signUpUser = async (
   return data;
 };
 
-export const userReservations = async (id: string) => {
-  const { data } = await $authHost.get(`/user/${id}/reservations`);
-}
+export const createReservation = async (params: any) => {
+  const { data } = await $authHost.post(`/reservation`, {
+    ...params,
+  });
+  return data;
+};

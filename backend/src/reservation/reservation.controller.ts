@@ -7,6 +7,13 @@ export class ReservationController {
 
   @Post()
   create(@Body() body: any) {
-    return this.reservationService.addReservation(body);
+    const data = {
+      userId: body.userId,
+      hotelId: body.hotelId,
+      roomId: body.roomId,
+      dateStart: body.order.from,
+      dateEnd: body.order.to,
+    };
+    return this.reservationService.addReservation(data);
   }
 }

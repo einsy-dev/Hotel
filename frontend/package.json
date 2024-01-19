@@ -2,6 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
   "dependencies": {
     "@reduxjs/toolkit": "^2.0.1",
     "axios": "^1.6.3",
@@ -21,7 +22,7 @@
     "serve": "^14.2.1"
   },
   "scripts": {
-    "start": "serve -s build",
+    "start": "react-scripts start",
     "start:dev": "react-scripts start --watch-all",
     "build": "react-scripts build",
     "test": "react-scripts test",

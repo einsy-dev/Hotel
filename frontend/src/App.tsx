@@ -3,10 +3,11 @@ import { NavLink } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Navigation from "./components/navigation";
 import LoginRegister from "./components/login.register";
+import Chat from "./components/chat";
 
 function App() {
   return (
-    <div className="bg-light" style={{minHeight: "100vh"}}>
+    <div className="bg-light" style={{ minHeight: "100vh" }}>
       <Container className="d-flex flex-column">
         <header className="d-flex my-4">
           <NavLink
@@ -25,6 +26,7 @@ function App() {
           <div className="d-flex flex-column w-50 mx-4">
             <AppRouter />
           </div>
+          <Chat />
         </main>
       </Container>
     </div>

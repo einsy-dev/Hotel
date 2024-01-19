@@ -10,3 +10,10 @@
 ### Используя Docker
 #### Выполнить команду
 docker-compose up -d // Собрать и запустить контейнеры 
+
+### Скриншоты
+
+![Registration form](image.png)
+![Login form](image-1.png)
+![Hotels list](image-2.png)
+![Hotel page](image-3.png)

@@ -8,12 +8,12 @@ import CardForm from "../card.view.form";
 
 export default function CardView({
   data,
-  isRoom = false,
   setMode,
+  isRoom = false,
 }: {
   data: any;
-  isRoom?: boolean;
   setMode?: any;
+  isRoom?: boolean;
 }) {
   const { _id, images, name, description } = data;
   const [rooms, setRooms] = useState([]);
@@ -42,7 +42,7 @@ export default function CardView({
             </Button>
             <Button
               className="bg-secondary ms-4"
-              onClick={() => setAddRoom(true)}
+              onClick={() => setAddRoom(!addRoom)}
             >
               Добавить номер
             </Button>
@@ -51,13 +51,14 @@ export default function CardView({
       </Container>
 
       {addRoom ? (
-        <Container className="bg-white rounded-4 shadow p-4 mt-4">
+        <Container className="bg-white rounded-4 shadow p-4 mb-4">
           <CardForm type="room" hotel={_id} />
         </Container>
       ) : null}
 
       {!isRoom ? (
         <Cards
+          isRoom
           data={rooms}
           activePage={activePage}
           setActivePage={setActivePage}

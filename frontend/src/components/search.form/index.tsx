@@ -1,15 +1,21 @@
 import { Button, Container, Form } from "react-bootstrap";
 import Calendar from "./calendar";
-import moment from "moment";
+import moment, { Moment } from "moment";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 export default function SearchForm({ state, setState, search }: any) {
   const [short, setShort] = useState(false);
+  const dispatch = useDispatch();
   function changeName(e: React.ChangeEvent<HTMLInputElement>) {
     const { value }: { name: string; value: string } =
       e.target as HTMLInputElement;
     setState((prev: any) => ({ ...prev, name: value.trim() }));
   }
+
+  const format = (date: Moment) => {
+    return moment(date).format("DD.MM.YYYY");
+  };
 
   return (
     <Container className="bg-white rounded-4 shadow p-3 mb-4">
@@ -26,13 +32,11 @@ export default function SearchForm({ state, setState, search }: any) {
       {moment(state.order.from).isValid() && (
         <div className=" d-flex justify-content-center user-select-none mt-3">
           <div className="border form-control text-center">
-            {moment(state.order.from).isValid() &&
-              moment(state.order.from).format("DD.MM.YYYY")}
+            {moment(state.order.from).isValid() && format(state.order.from)}
           </div>
           <div className="w-25 text-center my-auto">-</div>
           <div className="border form-control text-center">
-            {moment(state.order.to).isValid() &&
-              moment(state.order.to).format("DD.MM.YYYY")}
+            {moment(state.order.to).isValid() && format(state.order.to)}
           </div>
         </div>
       )}
@@ -43,6 +47,13 @@ export default function SearchForm({ state, setState, search }: any) {
         variant="primary"
         className="mt-3 px-4"
         onClick={() => {
+          dispatch({
+            type: "ORDER",
+            payload: {
+              from: format(state.order.from),
+              to: format(state.order.to),
+            },
+          });
           setShort(true);
           search();
         }}

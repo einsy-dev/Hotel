@@ -14,14 +14,18 @@ export class ReservationService implements IReservation {
     @InjectModel('Reservation')
     private readonly reservationModel,
   ) {}
+
   async addReservation(data: ReservationDto): Promise<Reservation> {
-    return await this.reservationModel.create(data);
+    return await new this.reservationModel(data).save();
   }
-  removeReservation(id: Schema.Types.ObjectId): Promise<void> {
-    return this.reservationModel.deleteOne({ _id: id });
+
+  async removeReservation(id: Schema.Types.ObjectId): Promise<void> {
+    return await this.reservationModel.deleteOne({ _id: id });
   }
-  getReservations(filter: ReservationSearchOptions): Promise<Reservation[]> {
-    return this.reservationModel
+  async getReservations(
+    filter: ReservationSearchOptions,
+  ): Promise<Reservation[]> {
+    return await this.reservationModel
       .find({
         userId: filter.userId,
         dateStart: { $gte: filter.dateStart },
