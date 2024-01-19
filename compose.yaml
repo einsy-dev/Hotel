@@ -1,4 +1,4 @@
-version: "1"
+version: "1.0.1"
 services:
   app:
     build: ./frontend
@@ -8,16 +8,13 @@ services:
       - 3000:3000
     depends_on:
       - server
-    env_file:
-      - ./env.list
   server:
     build: ./backend
     networks:
       - internet
+      - backend
     ports:
-      - 27017:3000
-    env_file:
-      - ./env.list
+      - 8080:3000
 networks:
   backend:
     name: backend

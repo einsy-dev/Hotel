@@ -43,6 +43,8 @@ export default function MainPage({ search = false }: { search?: boolean }) {
     startSearching();
   }, [activePage as never]);
 
+  console.log(process.env);
+
   return (
     <>
       {search && (
