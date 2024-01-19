@@ -8,12 +8,16 @@ services:
       - 3000:3000
     depends_on:
       - server
+    env_file:
+      - ./env.list
   server:
     build: ./backend
     networks:
-      - internet 
+      - internet
     ports:
       - 27017:3000
+    env_file:
+      - ./env.list
 networks:
   backend:
     name: backend
