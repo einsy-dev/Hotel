@@ -1,25 +1,27 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   Param,
   Post,
   Put,
   Query,
   UploadedFiles,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { HotelService } from './hotel.service';
 import { HotelRoomService } from './hotel.room.servise';
 import { ObjectId } from 'mongoose';
-import { SearchRoomsParams } from './hotel.room.interface';
 import { Hotel } from 'src/mongo/schemas/hotel.schema';
 import { HotelRoom } from 'src/mongo/schemas/hotel.room.schema';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { SearchHotelParams } from './hotel.interface';
 import { diskStorage } from 'multer';
 import * as uuid from 'uuid';
+import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
+import { Roles } from 'src/auth/roles.decorator';
+import { RolesGuard } from 'src/auth/roles.guard';
 
 @Controller('api')
 export class HotelController {
@@ -29,6 +31,7 @@ export class HotelController {
   ) {}
 
   // Hotel
+
   @Get('hotels')
   async getHotels(@Query() query: SearchHotelParams) {
     return this.hotelService.find(query);
@@ -37,6 +40,9 @@ export class HotelController {
   async getHotel(@Param() { id }: { id: ObjectId }) {
     return this.hotelService.findById(id);
   }
+
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['admin'])
   @Post('hotel')
   @UseInterceptors(
     FilesInterceptor('files', 20, {
@@ -56,6 +62,8 @@ export class HotelController {
     return await this.hotelService.create(body, files);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['admin'])
   @Put('hotel/:id')
   @UseInterceptors(
     FilesInterceptor('files', 20, {
@@ -81,21 +89,19 @@ export class HotelController {
 
     return this.hotelService.update({ id, params: body });
   }
-  @Delete('hotel/:id')
-  async delete(@Param() { id }: { id: ObjectId }) {
-    return this.hotelService.delete(id);
-  }
 
   // Hotel-room
-  @Get('rooms/:hotelId')
-  async getHotelRooms(@Query() query: SearchRoomsParams) {
-    return this.roomService.find(query);
+  @Get('rooms/:id')
+  async getHotelRooms(@Param() { id }: any) {
+    return this.roomService.find(id);
   }
   @Get('room/:id')
   async getHotelRoom(@Param() { id }: { id: ObjectId }) {
     return this.roomService.findById(id);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['admin'])
   @Post('room')
   @UseInterceptors(
     FilesInterceptor('files', 20, {
@@ -115,16 +121,13 @@ export class HotelController {
     return await this.roomService.create(body, files);
   }
 
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['admin'])
   @Put('room/:id')
   async updateRoom(
     @Param() { id }: { id: ObjectId },
     @Body() data: Partial<HotelRoom>,
   ) {
     return this.roomService.update({ id, params: data });
-  }
-
-  @Delete('room/:id')
-  async deleteRoom(@Param() { id }: { id: ObjectId }) {
-    return this.roomService.delete(id);
   }
 }

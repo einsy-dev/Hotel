@@ -30,3 +30,8 @@ export const createReservation = async (params: any) => {
   });
   return data;
 };
+
+export const getUserReservations = async (id: String) => {
+  const { data } = await $authHost.get(`/reservation/user/${id}`);
+  return data;
+};

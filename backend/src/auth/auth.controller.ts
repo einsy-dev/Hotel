@@ -15,8 +15,8 @@ import { JwtAuthGuard } from './jwt.auth.guard';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Get()
+  @UseGuards(JwtAuthGuard)
   async validate(@Request() req: any) {
     return {
       user: req.user,

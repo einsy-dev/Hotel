@@ -60,7 +60,4 @@ export class HotelService implements IHotelService {
     await this.hotelModel.findByIdAndUpdate(data.id, data.params);
     return { message: 'ok' };
   }
-  async delete(id: ObjectId): Promise<any> {
-    return await this.hotelModel.findByIdAndDelete(id).exec();
-  }
 }

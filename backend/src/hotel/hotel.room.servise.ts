@@ -5,11 +5,7 @@ import {
   HotelRoomDocument,
 } from 'src/mongo/schemas/hotel.room.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import {
-  IHotelRoomService,
-  SearchRoomsParams,
-  UpdateRoomsParams,
-} from './hotel.room.interface';
+import { IHotelRoomService, UpdateRoomsParams } from './hotel.room.interface';
 
 @Injectable()
 export class HotelRoomService implements IHotelRoomService {
@@ -18,12 +14,8 @@ export class HotelRoomService implements IHotelRoomService {
     private readonly hotelRoomModel: Model<HotelRoomDocument>,
   ) {}
 
-  find(data: SearchRoomsParams): Promise<HotelRoom[]> {
-    return this.hotelRoomModel
-      .find(data.params)
-      .skip(data.offset)
-      .limit(data.limit)
-      .exec();
+  find(id: any): Promise<HotelRoom[]> {
+    return this.hotelRoomModel.find({ hotel: id }).exec();
   }
 
   findById(id: ObjectId): Promise<HotelRoom> {
@@ -45,9 +37,5 @@ export class HotelRoomService implements IHotelRoomService {
 
   update(data: UpdateRoomsParams): Promise<HotelRoom> {
     return this.hotelRoomModel.findByIdAndUpdate(data.id, data.params).exec();
-  }
-
-  delete(id: ObjectId): Promise<any> {
-    return this.hotelRoomModel.findByIdAndDelete(id).exec();
   }
 }

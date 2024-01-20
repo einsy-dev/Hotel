@@ -1,12 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import {
-  IReservation,
-  ReservationDto,
-  ReservationSearchOptions,
-} from './reservation.interface';
-import { Schema } from 'mongoose';
+import { IReservation, ReservationDto } from './reservation.interface';
 import { Reservation } from 'src/mongo/schemas/reservation.schema';
+import { ObjectId } from 'mongoose';
 
 @Injectable()
 export class ReservationService implements IReservation {
@@ -19,18 +15,14 @@ export class ReservationService implements IReservation {
     return await new this.reservationModel(data).save();
   }
 
-  async removeReservation(id: Schema.Types.ObjectId): Promise<void> {
-    return await this.reservationModel.deleteOne({ _id: id });
-  }
-  async getReservations(
-    filter: ReservationSearchOptions,
-  ): Promise<Reservation[]> {
+  async getAllUserReservations(id: ObjectId): Promise<Reservation[]> {
     return await this.reservationModel
       .find({
-        userId: filter.userId,
-        dateStart: { $gte: filter.dateStart },
-        dateEnd: { $lte: filter.dateEnd },
+        userId: id,
       })
       .exec();
+  }
+  async removeReservation(id: ObjectId): Promise<void> {
+    return await this.reservationModel.findByIdandDelete(id);
   }
 }

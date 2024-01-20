@@ -17,7 +17,6 @@ interface IHotelService {
   findById(id: ObjectId): Promise<Hotel>;
   create(data: Partial<Hotel>, files: any): Promise<Hotel>;
   update(data: UpdateHotelParams): Promise<Hotel>;
-  delete(id: ObjectId): Promise<Hotel>;
 }
 
 export { IHotelService, SearchHotelParams, UpdateHotelParams };

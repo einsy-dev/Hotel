@@ -1,18 +1,19 @@
 import { useLayoutEffect, useState } from "react";
 import { Container, Spinner, Table } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-import { getUser } from "../axios/appApi";
+import { getUserReservations } from "../axios/userApi";
+import moment from "moment";
 
 export default function UserPage() {
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<any>({});
+  const [data, setData] = useState<any>([]);
   const { id } = useParams();
 
   useLayoutEffect(() => {
     setLoading(true);
     if (id !== undefined) {
-      getUser(id).then((data) => {
-        setUser(data);
+      getUserReservations(id).then((data) => {
+        setData(data);
         setLoading(false);
       });
     }
@@ -29,7 +30,6 @@ export default function UserPage() {
         </>
       ) : (
         <Container className="bg-white rounded-4 shadow pt-4 pb-2 px-4 ">
-          <div className="fs-5 mb-3">{user.name}</div>
           <Table striped bordered hover>
             <thead>
               <tr className="text-center">
@@ -40,18 +40,14 @@ export default function UserPage() {
               </tr>
             </thead>
             <tbody>
-              {/* {users.map((user: any, index: number) => (
-                <tr
-                  className="text-center"
-                  key={index}
-                  onClick={() => navigate(`/user/${user._id}`)}
-                >
+              {data?.map((el: any, index: number) => (
+                <tr className="text-center" key={index}>
                   <td>{++index}</td>
-                  <td>{user.name}</td>
-                  <td>{user.phone}</td>
-                  <td>{user.email}</td>
+                  <td>{el.hotelId}</td>
+                  <td>{moment(data.dateStart).format("DD.MM.YYYY")}</td>
+                  <td>{moment(data.dateEnd).format("DD.MM.YYYY")}</td>
                 </tr>
-              ))} */}
+              ))}
             </tbody>
           </Table>
         </Container>
