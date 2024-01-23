@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongoose';
 import { Message } from 'src/mongo/schemas/message.schema';
-import { SupportRequest } from 'src/mongo/schemas/support.request.schema';
+import { Support } from 'src/mongo/schemas/support.schema';
 
 interface CreateSupportRequestDto {
   user: ObjectId;
@@ -23,29 +23,33 @@ interface GetChatListParams {
   isActive: boolean;
 }
 
-interface ISupportRequestService {
-  findSupportRequests(params: GetChatListParams): Promise<SupportRequest[]>;
+interface ISupportService {
+  findSupportRequests(params: GetChatListParams): Promise<Support[]>;
   sendMessage(data: SendMessageDto): Promise<Message>;
   getMessages(supportRequest: ObjectId): Promise<Message[]>;
   subscribe(
-    handler: (supportRequest: SupportRequest, message: Message) => void,
+    handler: (supportRequest: Support, message: Message) => void,
   ): () => void;
 }
 
-interface ISupportRequestClientService {
-  createSupportRequest(data: CreateSupportRequestDto): Promise<SupportRequest>;
+interface ISupportClientService {
+  createSupportRequest(data: CreateSupportRequestDto): Promise<Support>;
   markMessagesAsRead(params: MarkMessagesAsReadDto);
   getUnreadCount(supportRequest: ObjectId): Promise<Message[]>;
 }
 
-interface ISupportRequestEmployeeService {
+interface ISupportEmployeeService {
   markMessagesAsRead(params: MarkMessagesAsReadDto);
   getUnreadCount(supportRequest: ObjectId): Promise<Message[]>;
   closeRequest(supportRequest: ObjectId): Promise<void>;
 }
 
 export {
-  ISupportRequestService,
-  ISupportRequestClientService,
-  ISupportRequestEmployeeService,
+  ISupportService,
+  ISupportClientService,
+  ISupportEmployeeService,
+  CreateSupportRequestDto,
+  SendMessageDto,
+  MarkMessagesAsReadDto,
+  GetChatListParams,
 };

@@ -4,16 +4,16 @@ import { Document, ObjectId } from 'mongoose';
 export type MessageDocument = Message & Document;
 @Schema()
 export class Message {
-  @Prop({ required: true })
+  @Prop({ type: String, required: true })
   author: ObjectId;
 
-  @Prop({ required: true })
+  @Prop({ type: Date, default: Date.now })
   sentAt: Date;
 
-  @Prop({ required: true })
+  @Prop({ type: String, required: true })
   text: string;
 
-  @Prop()
+  @Prop({ type: Date })
   readAt: Date;
 }
 
