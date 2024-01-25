@@ -1,14 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { ChatLeft } from "react-bootstrap-icons";
+import redux from "../../redux";
 import io from "socket.io-client";
 
-export default function Chat({ id }: any) {
+export default function Chat() {
   const [dialog, setDialog] = useState(false);
   const [input, setInput] = useState<string>("");
   const [socket, setSocket] = useState<any>();
   const [data, setData] = useState<any>([]);
   const chatRef = useRef<any>();
+  const { user } = redux.getState();
 
   const sendMessage = () => {
     socket.emit("message", {
@@ -22,7 +24,9 @@ export default function Chat({ id }: any) {
   }, [data, dialog]);
 
   useEffect(() => {
-    const newSocket = io(process.env.REACT_APP_SOCKET_URL + "/?userId=" + id);
+    const newSocket = io(
+      process.env.REACT_APP_SOCKET_URL + "/?userId=" + user._id
+    );
     setSocket(newSocket);
 
     newSocket.on("init", (res) => {
@@ -66,7 +70,7 @@ export default function Chat({ id }: any) {
             style={{ height: "500px" }}
           >
             {data[0].messages.map((el: any, index: number) =>
-              el.author === id ? (
+              el.author === user._id ? (
                 <div
                   className="align-self-end bg-success bg-opacity-50 shadow p-2 rounded-4 text-center  ms-4 mb-2"
                   key={index}

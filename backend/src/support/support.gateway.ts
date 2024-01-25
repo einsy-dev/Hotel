@@ -24,7 +24,6 @@ export class SupportGateway
     const { userId } = client.handshake.query;
     const { role } = await this.userService.findById(userId);
     this.users = { ...this.users, [client.id]: { userId: userId, role } };
-    console.log(this.users);
     if (role === 'client') {
       const userSupport = await this.supportService.getSupportByUserId(userId);
       this.server.to(client.id).emit('init', userSupport);
@@ -35,7 +34,6 @@ export class SupportGateway
   }
 
   async handleDisconnect(client: any) {
-    console.log('disconnected');
     delete this.users[client.id];
   }
 
@@ -53,7 +51,6 @@ export class SupportGateway
           )
             recepients.push(el);
         }
-        console.log(recepients);
         this.server.to(recepients).emit('message', { message, supportId });
       });
   }

@@ -28,18 +28,20 @@ export default function Auth({
     password: "",
     phone: "",
   });
+  const [status, setStatus] = useState("");
+
   function sendData(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (login) {
       signInUser(data.email, data.password)
         .then((data) => Cookies.set("token", data.access_token))
-        .finally(() => document.location.reload())
-        .catch(() => console.log("Ошибка входа"));
+        .then(() => document.location.reload())
+        .catch(() => setStatus("Ошибка входа"));
     } else {
       signUpUser(data.name, data.email, data.password, data.phone)
         .then((data) => Cookies.set("token", data.access_token))
-        .finally(() => document.location.reload())
-        .catch(() => console.log("Ошибка регистрации"));
+        .then(() => document.location.reload())
+        .catch((err) => setStatus("Ошибка регистрации"));
     }
   }
 
@@ -105,7 +107,7 @@ export default function Auth({
               />
             </Form.Group>
           )}
-
+          <Form.Label className="text-danger">{status}</Form.Label>
           <Modal.Footer className="pb-0">
             <Button variant="primary" type="submit">
               {login ? "Войти" : "Регистрация"}

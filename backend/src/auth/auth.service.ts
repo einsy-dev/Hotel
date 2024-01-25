@@ -1,6 +1,10 @@
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  HttpException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 
 @Injectable()
@@ -15,6 +19,12 @@ export class AuthService {
     name: string,
     phone: string,
   ): Promise<any> {
+    if (!email || !password) {
+      throw new HttpException(
+        { message: 'Email and password are required', statusCode: 400 },
+        400,
+      );
+    }
     const user = await this.userService.create({
       name,
       email,
@@ -30,7 +40,16 @@ export class AuthService {
     };
   }
   async signin(email, password): Promise<any> {
+    if (!email || !password) {
+      throw new HttpException(
+        { message: 'Email and password are required', statusCode: 400 },
+        400,
+      );
+    }
     const user = await this.userService.findByEmail(email);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
     const compare = await bcrypt.compare(password, user.password);
     if (!compare) {
       throw new UnauthorizedException();
