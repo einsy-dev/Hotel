@@ -23,9 +23,14 @@ export class SupportService {
     if (isExist) {
       return await this.supportModel.findById(isExist);
     } else {
+      const newMessage = await new this.messageModel({
+        author: '65b2345cba5f0ee05624d16fs',
+        text: 'Здравствуйте, чем могу вам помочь?',
+      }).save();
       return await new this.supportModel({
         user: userId,
         isActive: true,
+        messages: newMessage,
       }).save();
     }
   }

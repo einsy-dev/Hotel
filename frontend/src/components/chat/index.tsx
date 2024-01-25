@@ -29,10 +29,6 @@ export default function Chat() {
     );
     setSocket(newSocket);
 
-    newSocket.on("init", (res) => {
-      setData(res);
-    });
-
     newSocket.on("message", ({ message, supportId }) => {
       setData((prev: any) => {
         return prev.map((el: any) => {
@@ -46,6 +42,10 @@ export default function Chat() {
           }
         });
       });
+    });
+
+    newSocket.on("init", (support) => {
+      setData([support]);
     });
 
     return () => {
@@ -72,14 +72,14 @@ export default function Chat() {
             {data[0].messages.map((el: any, index: number) =>
               el.author === user._id ? (
                 <div
-                  className="align-self-end bg-success bg-opacity-50 shadow p-2 rounded-4 text-center  ms-4 mb-2"
+                  className="align-self-end bg-success bg-opacity-50 shadow p-2 rounded-4 text-center  ms-5 mb-2"
                   key={index}
                 >
                   {el.text}
                 </div>
               ) : (
                 <div
-                  className="align-self-start bg-primary bg-opacity-50 shadow p-2 rounded-4 text-center me-4 mb-2 "
+                  className="align-self-start bg-primary bg-opacity-50 shadow p-2 rounded-4 text-center me-5 mb-2 "
                   key={index}
                 >
                   {el.text}
