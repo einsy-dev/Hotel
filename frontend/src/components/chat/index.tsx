@@ -19,10 +19,10 @@ export default function Chat({ id }: any) {
   useEffect(() => {
     chatRef.current &&
       (chatRef.current.scrollTop = chatRef.current.scrollHeight);
-  }, [data]);
+  }, [data, dialog]);
 
   useEffect(() => {
-    const newSocket = io("ws://localhost:8080/?userId=" + id);
+    const newSocket = io(process.env.REACT_APP_SOCKET_URL + "/?userId=" + id);
     setSocket(newSocket);
 
     newSocket.on("init", (res) => {
