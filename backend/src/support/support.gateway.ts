@@ -3,13 +3,13 @@ import {
   WebSocketGateway,
   WebSocketServer,
   OnGatewayConnection,
-  SubscribeMessage,
   OnGatewayDisconnect,
+  SubscribeMessage,
 } from '@nestjs/websockets';
 import { Server } from 'socket.io';
 import { SupportService } from './support.service';
 
-@WebSocketGateway()
+@WebSocketGateway({ cors: true })
 export class SupportGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {
@@ -23,32 +23,38 @@ export class SupportGateway
   async handleConnection(client: any) {
     const { userId } = client.handshake.query;
     const { role } = await this.userService.findById(userId);
-
-    this.users = { ...this.users, [userId]: { socketId: client.id, role } };
+    this.users = { ...this.users, [client.id]: { userId: userId, role } };
+    console.log(this.users);
     if (role === 'client') {
-      const messages = await this.supportService.getMessages(userId);
-      this.server.to(client.id).emit('message', messages);
+      const userSupport = await this.supportService.getSupportByUserId(userId);
+      this.server.to(client.id).emit('init', userSupport);
     } else {
-      const supports = await this.supportService.getSupports(true);
-      this.server.to(client.id).emit('message', supports);
+      const supports = await this.supportService.getActiveSupports();
+      this.server.to(client.id).emit('init', supports);
     }
   }
 
   async handleDisconnect(client: any) {
-    const { userId } = client.handshake.query;
-    delete this.users[userId];
+    console.log('disconnected');
+    delete this.users[client.id];
   }
 
   @SubscribeMessage('message')
-  async handleMessage(client: any, message: any) {
-    const { userId, supportId } = client.handshake.query;
-    await this.supportService.sendMessage(userId, supportId, message);
-    const recivers = [];
-    for (const user in this.users) {
-      if (this.users[user].role !== 'client') {
-        recivers.push(this.users[user].socketId);
-      }
-    }
-    this.server.to(recivers).emit('message', message);
+  async handleMessage(client: any, payload: any) {
+    const { supportId, message } = payload;
+    await this.supportService
+      .sendMessage(this.users[client.id].userId, supportId, message)
+      .then(({ user, message }) => {
+        const recepients = [];
+        for (const el in this.users) {
+          if (
+            this.users[el].role !== 'client' ||
+            user === this.users[el].userId
+          )
+            recepients.push(el);
+        }
+        console.log(recepients);
+        this.server.to(recepients).emit('message', { message, supportId });
+      });
   }
 }

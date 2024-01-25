@@ -4,8 +4,10 @@ import Container from "react-bootstrap/Container";
 import Navigation from "./components/navigation";
 import LoginRegister from "./components/login.register";
 import Chat from "./components/chat";
+import { useSelector } from "react-redux";
 
 function App() {
+  const { _id: id }: any = useSelector((state: any) => state.user);
   return (
     <div className="bg-light" style={{ minHeight: "100vh" }}>
       <Container className="d-flex flex-column">
@@ -26,7 +28,7 @@ function App() {
           <div className="d-flex flex-column w-50 mx-4">
             <AppRouter />
           </div>
-          <Chat />
+          {id !== undefined && <Chat id={id} />}
         </main>
       </Container>
     </div>

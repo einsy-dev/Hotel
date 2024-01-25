@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Model, ObjectId } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { SupportDocument } from 'src/mongo/schemas/support.schema';
-import { Message, MessageDocument } from 'src/mongo/schemas/message.schema';
+import { MessageDocument } from 'src/mongo/schemas/message.schema';
 
 @Injectable()
 export class SupportService {
@@ -11,38 +11,39 @@ export class SupportService {
     @InjectModel('Message') private messageModel: Model<MessageDocument>,
   ) {}
 
-  async getSupports(isActive): Promise<SupportDocument[]> {
-    return await this.supportModel.find({ isActive }).exec();
+  async getActiveSupports(): Promise<SupportDocument[]> {
+    return await this.supportModel.find({ isActive: true });
   }
-  async getMessages(userId: ObjectId): Promise<Message[]> {
-    return await this.supportModel
-      .findOne({ user: userId, isActive: true })
-      .select(['messages', '-_id'])
-      .exec()
-      .then((data) => data.messages)
-      .catch(() => []);
+
+  async getSupportByUserId(userId: ObjectId): Promise<SupportDocument> {
+    const isExist = await this.supportModel.exists({
+      user: userId,
+      isActive: true,
+    });
+    if (isExist) {
+      return await this.supportModel.findById(isExist);
+    } else {
+      return await new this.supportModel({
+        user: userId,
+        isActive: true,
+      }).save();
+    }
   }
+
   async sendMessage(
     userId: string,
     supportId: string,
     message: string,
-  ): Promise<void> {
+  ): Promise<any> {
     const newMessage = await new this.messageModel({
       author: userId,
       text: message,
     }).save();
 
-    if (supportId !== undefined) {
-      await this.supportModel
-        .updateOne({ _id: supportId }, { $push: { messages: newMessage } })
-        .select(['user'])
-        .exec()
-        .then((data) => console.log(data));
-    } else {
-      await new this.supportModel({
-        user: userId,
-        messages: [newMessage],
-      }).save();
-    }
+    return await this.supportModel
+      .findByIdAndUpdate(supportId, {
+        $push: { messages: newMessage },
+      })
+      .then((data) => ({ user: data.user, message: newMessage }));
   }
 }

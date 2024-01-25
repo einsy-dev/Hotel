@@ -17,7 +17,6 @@ export default function Cards({
   limit?: number;
   isRoom?: boolean;
 }) {
-  console.log(data);
   const {
     user: { _id },
     store: { order },
