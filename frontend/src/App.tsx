@@ -13,6 +13,7 @@ function App() {
   const { isAuth }: any = useSelector((state: any) => state.user);
   const [isLoadind, setIsLoadind] = useState(true);
   const dispatch = useDispatch();
+  console.log(process.env)
 
   useLayoutEffect(() => {
     setIsLoadind(true);
