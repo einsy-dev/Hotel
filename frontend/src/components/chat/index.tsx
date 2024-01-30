@@ -8,14 +8,14 @@ export default function Chat() {
   const [dialog, setDialog] = useState(false);
   const [input, setInput] = useState<string>("");
   const [socket, setSocket] = useState<any>();
-  const [data, setData] = useState<any>([]);
+  const [data, setData] = useState<any>({});
   const chatRef = useRef<any>();
   const { user } = redux.getState();
 
   const sendMessage = () => {
     socket.emit("message", {
       message: input.trim(),
-      supportId: data[0]._id,
+      supportId: data._id,
     });
   };
   useEffect(() => {
@@ -31,21 +31,12 @@ export default function Chat() {
 
     newSocket.on("message", ({ message, supportId }) => {
       setData((prev: any) => {
-        return prev.map((el: any) => {
-          if (el._id === supportId) {
-            return {
-              ...el,
-              messages: [...el.messages, message],
-            };
-          } else {
-            return el;
-          }
-        });
+        return { ...prev, messages: [...prev.messages, message] };
       });
     });
 
-    newSocket.on("init", (support) => {
-      setData([support]);
+    newSocket.on("init", (res) => {
+      setData(res[0]);
     });
 
     return () => {
@@ -69,7 +60,7 @@ export default function Chat() {
             className=" d-flex flex-column p-2 overflow-auto"
             style={{ height: "500px" }}
           >
-            {data[0].messages.map((el: any, index: number) =>
+            {data.messages.map((el: any, index: number) =>
               el.author === user._id ? (
                 <div
                   className="align-self-end bg-success bg-opacity-50 shadow p-2 rounded-4 text-center  ms-5 mb-2"
