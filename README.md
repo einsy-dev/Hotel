@@ -12,8 +12,11 @@
 docker-compose up -d // Собрать и запустить контейнеры 
 
 ### Скриншоты
-
-![Registration form](image.png)
-![Login form](image-1.png)
-![Hotels list](image-2.png)
-![Hotel page](image-3.png)
+#### Форма регистрации
+![Registration form](./images/registration-modal.png)
+#### Форма входа
+![Login form](./images/login-modal.png)
+#### Список отелей
+![Hotels list](./images/hotels-list.png)
+#### Страницы отеля
+![Hotel page](./images/hotel-page.png)
