@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { ChatLeft } from "react-bootstrap-icons";
 import redux from "../../redux";
@@ -23,7 +23,7 @@ export default function Chat() {
       (chatRef.current.scrollTop = chatRef.current.scrollHeight);
   }, [data, dialog]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const newSocket = io(
       process.env.REACT_APP_SOCKET_URL + "/?userId=" + user._id
     );
@@ -36,7 +36,7 @@ export default function Chat() {
     });
 
     newSocket.on("init", (res) => {
-      setData(res[0]);
+      setData(res);
     });
 
     return () => {
