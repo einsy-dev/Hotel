@@ -50,6 +50,7 @@ export class SupportGateway
 
   @SubscribeMessage('closeChat')
   async closeChat(client: any, payload: any) {
+    if (this.users[client.id].role === 'client') return;
     await this.supportService.closeChat(payload.supportId).then((data) => {
       const recepients = recepientsArray(
         this.users,
