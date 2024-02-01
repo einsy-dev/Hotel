@@ -43,15 +43,28 @@ export class SupportGateway
     await this.supportService
       .sendMessage(this.users[client.id].userId, supportId, message)
       .then(({ user, message }) => {
-        const recepients = [];
-        for (const el in this.users) {
-          if (
-            this.users[el].role !== 'client' ||
-            user === this.users[el].userId
-          )
-            recepients.push(el);
-        }
+        const recepients = recepientsArray(this.users, user);
         this.server.to(recepients).emit('message', { message, supportId });
       });
   }
+
+  @SubscribeMessage('closeChat')
+  async closeChat(client: any, payload: any) {
+    await this.supportService.closeChat(payload.supportId).then((data) => {
+      const recepients = recepientsArray(
+        this.users,
+        this.users[client.id].userId,
+      );
+      this.server.to(recepients).emit('closeChat', data);
+    });
+  }
+}
+
+function recepientsArray(users, user) {
+  const recepients = [];
+  for (const el in users) {
+    if (users[el].role !== 'client' || user === users[el].userId)
+      recepients.push(el);
+  }
+  return recepients;
 }

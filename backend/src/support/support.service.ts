@@ -51,4 +51,12 @@ export class SupportService {
       })
       .then((data) => ({ user: data.user, message: newMessage }));
   }
+
+  async closeChat(supportId) {
+    return await this.supportModel
+      .findByIdAndUpdate(supportId, {
+        isActive: false,
+      })
+      .then((data) => data);
+  }
 }
