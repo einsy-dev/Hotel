@@ -7,26 +7,34 @@ export default function Navigation() {
 
   return (
     <ListGroup as="ol" className="rounded-4 shadow">
-      <MyLink path="/hotels" text="Все гостиницы" />
       <MyLink path="/" text="Поиск" />
-      {user && user.role === "admin" && (
+      <MyLink path="/all" text="Все отели" />
+      {user.isAuth && <MyLink path="/profile" text="Профиль" />}
+      {user.role !== "client" && (
         <>
-          <MyLink path="/hotel/create" text="Добавить гостиницу" />
-          <MyLink path="/users" text="Пользователи" />
+          <MyLink path="/admin/hotel/create" text="Админ панель" />
         </>
       )}
     </ListGroup>
   );
 }
 
-function MyLink({ path, text }: { path: string; text: string }): JSX.Element {
+function MyLink({
+  path,
+  text,
+  ...options
+}: {
+  path: string;
+  text: string;
+  [key: string]: any;
+}): JSX.Element {
   return (
     <NavLink
       to={path}
       className="list-group-item bg-white border-0 text-decoration-none text-black"
+      {...options}
     >
-      {" "}
-      {">"} {text}
+      {text}
     </NavLink>
   );
 }

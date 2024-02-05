@@ -1,33 +1,36 @@
 import { useEffect, useState } from "react";
 
 export default function Pagination({
-  limitPage,
-  activePage,
-  setPage,
+  limit,
+  callback,
+  page,
 }: {
-  limitPage: number;
-  activePage: number;
-  setPage: any;
+  limit: number;
+  callback: any;
+  page?: number;
 }) {
   const [result, setResult] = useState([]);
-  const pages: any = Array.from({ length: limitPage }, (_, i) => i + 1);
+  const [activePage, setActivePage] = useState(page || 1);
+  const pages: any = Array.from({ length: limit }, (_, i) => i + 1);
 
   const handleClick = (i: number) => {
-    setPage(i);
+    setActivePage(i);
+    callback();
     document.documentElement.scrollTop = 0;
   };
 
   useEffect(() => {
-    if (limitPage <= 5) {
-      setResult(pages.slice(0, limitPage));
+    if (limit <= 5) {
+      setResult(pages.slice(0, limit));
     } else if (activePage <= 2) {
       setResult(pages.slice(0, 5));
-    } else if (activePage >= limitPage - 2) {
-      setResult(pages.slice(limitPage - 5, limitPage));
+    } else if (activePage >= limit - 2) {
+      setResult(pages.slice(limit - 5, limit));
     } else {
       setResult(pages.slice(activePage - 3, activePage + 2));
     }
-  }, [activePage, limitPage]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activePage, limit]);
 
   return (
     <div className="mt-4 w-100 d-flex justify-content-center">
@@ -54,7 +57,7 @@ export default function Pagination({
           <li className="page-item">
             <button
               className={
-                activePage === limitPage ? "page-link disabled" : "page-link"
+                activePage === limit ? "page-link disabled" : "page-link"
               }
               onClick={() => handleClick(activePage + 1)}
             >

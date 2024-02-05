@@ -2,16 +2,16 @@ import { useState } from "react";
 import InputImages from "./input.images";
 import { Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { saveCard } from "../../../utils/save.card";
+import saveCard from "../../utils/save.card";
 
 export default function CardForm({
   data,
-  type,
+  isRoom = false,
   hotel,
   user,
 }: {
   data?: any;
-  type: string;
+  isRoom?: boolean;
   hotel?: string;
   user?: string;
 }) {
@@ -38,6 +38,7 @@ export default function CardForm({
         id="name"
         value={hotelData.name}
         onChange={(e) => setHotelData({ ...hotelData, name: e.target.value })}
+        disabled={isRoom}
       />
 
       <Form.Label htmlFor="descriptions" className="mt-3 user-select-none">
@@ -58,7 +59,7 @@ export default function CardForm({
           saveCard(
             { ...hotelData, files: inputFiles, _id: data?._id, user, hotel },
             navigate,
-            type,
+            isRoom,
             hotel,
             user
           )

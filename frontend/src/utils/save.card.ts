@@ -5,38 +5,38 @@ import {
   updateRoom,
 } from "../axios/appApi";
 
-export function saveCard(
+export default function saveCard(
   data: any,
   navigate: any,
-  type: string,
+  isRoom: boolean,
   hotel?: string,
   user?: string
 ) {
-  console.log(data);
   const formData = new FormData();
-  formData.append("name", data.name);
+  !isRoom && formData.append("name", data.name);
   formData.append("description", data.description);
   formData.append("images", data.images);
 
   for (let i = 0; i < data.files.length; i++) {
     formData.append("files", data.files[i]);
   }
-  if (type === "hotel") {
-    console.log("hotel");
+  if (!isRoom) {
     if (data._id !== undefined) {
-      updateHotel(formData, data._id).then(() => document.location.reload());
+      updateHotel(formData, data._id).then(() =>
+        navigate(0, { replace: true })
+      );
     } else {
       createHotel(formData)
         .then((res: any) => navigate(`/hotel/${res._id}`))
-        .then(() => document.location.reload());
+        .then(() => navigate(0, { replace: true }));
     }
-  } else if (type === "room") {
-    console.log("room");
-    formData.append("hotel", hotel!);
+  } else {
     if (data._id !== undefined) {
-      updateRoom(formData, data._id);
+      updateRoom(formData, data._id).then(() =>
+        navigate("/all", { replace: true })
+      );
     } else {
-      createRoom(formData);
+      createRoom(formData).then(() => navigate(0, { replace: true }));
     }
   }
 }

@@ -124,10 +124,26 @@ export class HotelController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(['admin'])
   @Put('room/:id')
+  @UseInterceptors(
+    FilesInterceptor('files', 20, {
+      storage: diskStorage({
+        destination: './public/images',
+        filename: (req, file, callback) => {
+          const filename: string = uuid.v4() + '.jpg';
+          callback(null, filename);
+        },
+      }),
+    }),
+  )
   async updateRoom(
+    @UploadedFiles() files: any,
     @Param() { id }: { id: ObjectId },
-    @Body() data: Partial<HotelRoom>,
+    @Body() body: Partial<HotelRoom>,
   ) {
-    return this.roomService.update({ id, params: data });
+    body.images = Array.from(body.images).join('').split(',');
+    if (files) {
+      body.images = [...body.images, ...files.map((file) => file.filename)];
+    }
+    return this.roomService.update({ id, params: body });
   }
 }

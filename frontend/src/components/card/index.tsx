@@ -1,34 +1,28 @@
-import { NavLink } from "react-router-dom";
-import Pagination from "../pagination";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { createReservation } from "../../axios/userApi";
 import reduxStore from "../../redux";
 
 export default function Cards({
   data,
-  activePage,
-  setActivePage,
-  limit,
   isRoom = false,
 }: {
   data: any[];
-  activePage: number;
-  setActivePage: any;
-  limit?: number;
   isRoom?: boolean;
 }) {
   const {
     user: { _id },
     store: { order },
   } = reduxStore.getState();
+  const navigate = useNavigate();
   async function reservation(roomId: string, hotelId: string) {
     if (order === null) {
       alert("Выберите даты для бронирования");
       return;
     }
-    createReservation({ userId: _id, roomId, hotelId, order }).then(() => {
-      console.log("object");
-    });
+    createReservation({ userId: _id, roomId, hotelId, order }).then(() =>
+      navigate("/")
+    );
   }
   return (
     <>
@@ -58,20 +52,21 @@ export default function Cards({
                 Подробнее
               </NavLink>
             ) : (
-              <Button onClick={() => reservation(el._id, el.hotel)}>
-                Выбрать
-              </Button>
+              <>
+                <Button
+                  onClick={() => navigate("/room/" + el._id, { state: el })}
+                  className="me-4"
+                >
+                  Подробнее
+                </Button>
+                <Button onClick={() => reservation(el._id, el.hotel)}>
+                  Выбрать
+                </Button>
+              </>
             )}
           </div>
         </div>
       ))}
-      {!isRoom && limit && (
-        <Pagination
-          limitPage={limit}
-          activePage={activePage}
-          setPage={setActivePage}
-        />
-      )}
     </>
   );
 }

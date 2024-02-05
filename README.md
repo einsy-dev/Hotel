@@ -52,3 +52,7 @@ docker-compose up -d // Собрать и запустить контейнер�
 #### Список чатов
 
 ![Active chat](./images/chats-list.png)
+
+#### Панель админисратора
+
+![Active chat](./images/admin-panel.png)

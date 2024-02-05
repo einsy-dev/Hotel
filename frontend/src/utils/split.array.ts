@@ -1,4 +1,8 @@
-function splitArr(arr: Array<any>, n: number, initialArr: Array<any>) {
+export default function splitArr(
+  arr: Array<any>,
+  n: number,
+  initialArr: Array<any>
+) {
   const newArr = [initialArr];
   for (let i = 0; i < arr.length; i += n) {
     newArr.push(arr.slice(i, i + n));
@@ -10,5 +14,3 @@ function splitArr(arr: Array<any>, n: number, initialArr: Array<any>) {
   }
   return newArr;
 }
-
-export { splitArr };

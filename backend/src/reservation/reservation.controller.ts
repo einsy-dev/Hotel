@@ -16,6 +16,12 @@ import { ObjectId } from 'mongoose';
 @Controller('reservation')
 export class ReservationController {
   constructor(private readonly reservationService: ReservationService) {}
+  @Get('/all')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(['manager', 'admin'])
+  async getAllReservations() {
+    return this.reservationService.getAllReservations();
+  }
 
   @Get('/user/:id')
   @UseGuards(JwtAuthGuard, RolesGuard)

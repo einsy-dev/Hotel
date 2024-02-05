@@ -6,6 +6,7 @@ import {
 } from 'src/mongo/schemas/hotel.room.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { IHotelRoomService, UpdateRoomsParams } from './hotel.room.interface';
+import * as fs from 'fs';
 
 @Injectable()
 export class HotelRoomService implements IHotelRoomService {
@@ -35,7 +36,17 @@ export class HotelRoomService implements IHotelRoomService {
     return await new this.hotelRoomModel({ images, description, hotel }).save();
   }
 
-  update(data: UpdateRoomsParams): Promise<HotelRoom> {
+  async update(data: UpdateRoomsParams): Promise<HotelRoom> {
+    const prev = await this.hotelRoomModel.findById(data.id).select(['images']);
+    const fiilesToDelete = prev.images.filter(
+      (file) => !data.params.images.includes(file),
+    );
+
+    if (fiilesToDelete.length) {
+      fiilesToDelete.forEach((file) => {
+        fs.rmSync(`./public/images/${file}`, { force: true });
+      });
+    }
     return this.hotelRoomModel.findByIdAndUpdate(data.id, data.params).exec();
   }
 }

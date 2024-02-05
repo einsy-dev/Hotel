@@ -7,12 +7,12 @@ import Chat from "./components/chat";
 import { useDispatch, useSelector } from "react-redux";
 import { useLayoutEffect, useState } from "react";
 import { authUser } from "./axios/userApi";
-import { Spinner } from "react-bootstrap";
+import ComponentLoading from "./components/hoc/component.loading";
 
 function App() {
-  const { isAuth }: any = useSelector((state: any) => state.user);
-  const [isLoadind, setIsLoadind] = useState(true);
+  const { isAuth, role }: any = useSelector((state: any) => state.user);
   const dispatch = useDispatch();
+  const [isLoadind, setIsLoadind] = useState(true);
 
   useLayoutEffect(() => {
     setIsLoadind(true);
@@ -27,16 +27,8 @@ function App() {
   }, []);
 
   return (
-    <div className="bg-light" style={{ minHeight: "100vh" }}>
-      {isLoadind ? (
-        <Container className=" d-flex">
-          <Spinner
-            animation="border"
-            variant="primary"
-            className="m-auto mt-5"
-          />
-        </Container>
-      ) : (
+    <ComponentLoading isLoading={isLoadind}>
+      <div className="bg-light" style={{ minHeight: "100vh" }}>
         <Container className="d-flex flex-column">
           <header className="d-flex my-4">
             <NavLink
@@ -53,13 +45,13 @@ function App() {
               <Navigation />
             </nav>
             <div className="d-flex flex-column w-50 mx-4">
-              <AppRouter />
+              <AppRouter role={role} />
             </div>
             {isAuth && <Chat />}
           </main>
         </Container>
-      )}
-    </div>
+      </div>
+    </ComponentLoading>
   );
 }
 export default App;

@@ -1,21 +1,21 @@
 import { Button, Container, Form } from "react-bootstrap";
 import Calendar from "./calendar";
-import moment, { Moment } from "moment";
+import moment from "moment";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { format } from "../../utils/date.format";
 
 export default function SearchForm({ state, setState, search }: any) {
   const [short, setShort] = useState(false);
   const dispatch = useDispatch();
+
+  // Functions
+
   function changeName(e: React.ChangeEvent<HTMLInputElement>) {
     const { value }: { name: string; value: string } =
       e.target as HTMLInputElement;
     setState((prev: any) => ({ ...prev, name: value.trim() }));
   }
-
-  const format = (date: Moment) => {
-    return moment(date).format("DD.MM.YYYY");
-  };
 
   return (
     <Container className="bg-white rounded-4 shadow p-3 mb-4">
