@@ -7,6 +7,7 @@ import { SupportModule } from './support/support.module';
 import { ConfigModule } from './config/config.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { RoomModule } from './hotel.room/room.module';
 import { join } from 'path';
 
 @Module({
@@ -15,6 +16,7 @@ import { join } from 'path';
     UserModule,
     AuthModule,
     HotelModule,
+    RoomModule,
     ReservationModule,
     SupportModule,
     MongooseModule.forRoot(process.env.MONGO_DB),

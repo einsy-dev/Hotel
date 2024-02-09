@@ -8,12 +8,10 @@ export default function CardForm({
   data,
   isRoom = false,
   hotel,
-  user,
 }: {
   data?: any;
   isRoom?: boolean;
   hotel?: string;
-  user?: string;
 }) {
   const [inputFiles, setInputFiles] = useState<string[]>([]);
   const [hotelData, setHotelData] = useState({
@@ -22,7 +20,6 @@ export default function CardForm({
     images: data ? data.images : [],
   });
   const navigate = useNavigate();
-
   return (
     <>
       <InputImages
@@ -57,11 +54,9 @@ export default function CardForm({
         className="mt-4"
         onClick={() =>
           saveCard(
-            { ...hotelData, files: inputFiles, _id: data?._id, user, hotel },
+            { ...hotelData, files: inputFiles, id: data?._id, hotel },
             navigate,
-            isRoom,
-            hotel,
-            user
+            isRoom
           )
         }
       >

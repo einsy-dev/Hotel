@@ -6,7 +6,7 @@ import LoginRegister from "./components/login.register";
 import Chat from "./components/chat";
 import { useDispatch, useSelector } from "react-redux";
 import { useLayoutEffect, useState } from "react";
-import { authUser } from "./axios/userApi";
+import { authUser } from "./axios/user.api";
 import ComponentLoading from "./components/hoc/component.loading";
 
 function App() {

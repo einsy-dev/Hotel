@@ -5,13 +5,13 @@ import {
   HotelRoomDocument,
 } from 'src/mongo/schemas/hotel.room.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { IHotelRoomService, UpdateRoomsParams } from './hotel.room.interface';
+import { IRoomService, UpdateRoomsParams } from './room.interface';
 import * as fs from 'fs';
 
 @Injectable()
-export class HotelRoomService implements IHotelRoomService {
+export class RoomService implements IRoomService {
   constructor(
-    @InjectModel('HotelRoom')
+    @InjectModel('Room')
     private readonly hotelRoomModel: Model<HotelRoomDocument>,
   ) {}
 

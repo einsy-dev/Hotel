@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
-import { createReservation } from "../../axios/userApi";
+import { createReservation } from "../../axios/user.api";
 import reduxStore from "../../redux";
 
 export default function Cards({

@@ -1,6 +1,6 @@
 import { useLayoutEffect, useState } from "react";
 import { Table } from "react-bootstrap";
-import { getUsers } from "../../axios/appApi";
+import { getUsers } from "../../axios/admin.api";
 import { useNavigate } from "react-router-dom";
 import ComponentLoading from "../hoc/component.loading";
 

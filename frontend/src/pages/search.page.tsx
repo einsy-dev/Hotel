@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getHotels } from "../axios/appApi";
+import { getHotels } from "../axios/hotel.api";
 import Cards from "../components/card";
 import SearchForm from "../components/search.form";
 import ComponentLoading from "../components/hoc/component.loading";
@@ -28,7 +28,7 @@ export default function SearchPage({ all = false }: { all?: boolean }) {
     const { name, limit } = searchData;
     const offset = (page - 1) * limit;
     setLoading(true);
-    getHotels(name, limit, offset)
+    getHotels({ name, limit, offset })
       .then((data: any) => setHotels(data))
       .then(() => setLoading(false));
   }

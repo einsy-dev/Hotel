@@ -1,7 +1,5 @@
-import { useLayoutEffect, useState } from "react";
+import { useState } from "react";
 import Carousel from "../carousel";
-import { getHotelRooms } from "../../axios/appApi";
-import Cards from "../card";
 import { useSelector } from "react-redux";
 import { Button } from "react-bootstrap";
 import CardForm from "../card.form";
@@ -14,16 +12,11 @@ export default function CardView({
 }: {
   data: any;
   setMode?: any;
-  isRoom: boolean;
+  isRoom?: boolean;
 }) {
   const { _id, images, name, description } = data;
-  const [rooms, setRooms] = useState([]);
   const [addRoom, setAddRoom] = useState(false);
-  const user = useSelector((state: any) => state.user);
-
-  useLayoutEffect(() => {
-    !isRoom && getHotelRooms(_id).then((data) => setRooms(data));
-  }, [_id, isRoom]);
+  const { role } = useSelector((state: any) => state.user);
 
   return (
     <>
@@ -36,7 +29,7 @@ export default function CardView({
         <div id="description" className="">
           {description}
         </div>
-        {user.role === "admin" && (
+        {role === "admin" && (
           <div className="mt-4">
             <Button className="bg-success" onClick={() => setMode(true)}>
               Редактивировать
@@ -53,13 +46,11 @@ export default function CardView({
         )}
       </MyContainer>
 
-      {addRoom && isRoom && (
+      {addRoom && (
         <MyContainer>
           <CardForm isRoom hotel={_id} />
         </MyContainer>
       )}
-
-      {!isRoom && <Cards isRoom data={rooms} />}
     </>
   );
 }

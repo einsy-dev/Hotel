@@ -40,7 +40,7 @@ export default function LoginRegister() {
           className="btn text-primary"
           onClick={() => {
             Cookies.remove("token");
-            document.location.reload();
+            document.location.replace("/");
           }}
         >
           Выйти

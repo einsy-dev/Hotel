@@ -13,11 +13,11 @@ interface UpdateRoomsParams {
   params: Partial<HotelRoom>;
 }
 
-interface IHotelRoomService {
+interface IRoomService {
   find(data: SearchRoomsParams): Promise<HotelRoom[]>;
   findById(id: ObjectId): Promise<HotelRoom>;
   create(data: Partial<HotelRoom>, files: any): Promise<HotelRoom>;
   update(data: UpdateRoomsParams): Promise<HotelRoom>;
 }
 
-export { IHotelRoomService, UpdateRoomsParams, SearchRoomsParams };
+export { IRoomService, UpdateRoomsParams, SearchRoomsParams };

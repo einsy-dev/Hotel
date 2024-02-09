@@ -2,7 +2,7 @@ import { useLayoutEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
 import ComponentLoading from "../hoc/component.loading";
-import { getUserReservations } from "../../axios/userApi";
+import { getUserReservations } from "../../axios/user.api";
 import Reservations from "../reservations";
 
 export default function Profile({ data: user }: { data?: any }) {

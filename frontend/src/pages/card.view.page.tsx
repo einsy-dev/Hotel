@@ -1,35 +1,24 @@
 import CardForm from "../components/card.form";
-import { useLocation, useParams } from "react-router-dom";
-import { useLayoutEffect, useState } from "react";
-import { getHotel } from "../axios/appApi";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getHotel } from "../axios/hotel.api";
 import CardView from "../components/card.view";
 import ComponentLoading from "../components/hoc/component.loading";
 import MyContainer from "../components/hoc/my.container";
+import { getRoom, getRooms } from "../axios/room.api";
+import Cards from "../components/card";
 
-export default function CardViewPage({
-  create = false,
-  isRoom = false,
-}: {
-  create?: boolean;
-  isRoom?: boolean;
-}) {
-  const state = useLocation().state;
+export default function CardViewPage({ isRoom = false }: { isRoom?: boolean }) {
   const [data, setData] = useState({});
+  const [rooms, setRooms] = useState([]);
   const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     setLoading(true);
-    if (create) {
-      setData({});
-      setEditMode(true);
-      setLoading(false);
-      return;
-    }
-    if (!id) return;
-    if (!isRoom) {
-      getHotel(id)
+    if (isRoom) {
+      getRoom(id)
         .then((data) => {
           setData(data);
         })
@@ -37,10 +26,22 @@ export default function CardViewPage({
           setLoading(false);
         });
     } else {
-      setData(state);
-      setLoading(false);
+      getHotel(id)
+        .then((data) => {
+          setData(data);
+        })
+        .then(() => {
+          getRooms(id)
+            .then((data) => {
+              setRooms(data);
+              console.log(data);
+            })
+            .then(() => {
+              setLoading(false);
+            });
+        });
     }
-  }, [create, isRoom, id]);
+  }, [isRoom, id]);
   return (
     <ComponentLoading isLoading={loading}>
       {editMode ? (
@@ -50,6 +51,7 @@ export default function CardViewPage({
       ) : (
         <CardView data={data} setMode={setEditMode} isRoom={isRoom} />
       )}
+      {!isRoom && <Cards isRoom data={rooms} />}
     </ComponentLoading>
   );
 }

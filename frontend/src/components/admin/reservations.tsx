@@ -1,7 +1,7 @@
 import { useLayoutEffect, useState } from "react";
 import Reservations from "../reservations";
 import ComponentLoading from "../hoc/component.loading";
-import { getAllReservations } from "../../axios/userApi";
+import { getAllReservations } from "../../axios/admin.api";
 
 export default function AllReservations() {
   const [data, setData] = useState([]);
