@@ -14,6 +14,9 @@ export default function Chat() {
   const { user } = redux.getState();
 
   useLayoutEffect(() => {
+    if (process.env.REACT_APP_SOCKET_URL === undefined) {
+      return;
+    }
     const newSocket = io(
       process.env.REACT_APP_SOCKET_URL + "/?userId=" + user._id
     );
