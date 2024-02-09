@@ -26,6 +26,8 @@ function App() {
       });
   }, []);
 
+  console.log(process.env);
+
   return (
     <ComponentLoading isLoading={isLoadind}>
       <div className="bg-light" style={{ minHeight: "100vh" }}>
