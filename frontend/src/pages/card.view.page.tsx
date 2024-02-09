@@ -34,7 +34,6 @@ export default function CardViewPage({ isRoom = false }: { isRoom?: boolean }) {
           getRooms(id)
             .then((data) => {
               setRooms(data);
-              console.log(data);
             })
             .then(() => {
               setLoading(false);

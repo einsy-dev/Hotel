@@ -26,8 +26,6 @@ function App() {
       });
   }, []);
 
-  console.log(process.env);
-
   return (
     <ComponentLoading isLoading={isLoadind}>
       <div className="bg-light" style={{ minHeight: "100vh" }}>
@@ -49,7 +47,7 @@ function App() {
             <div className="d-flex flex-column w-50 mx-4">
               <AppRouter role={role} />
             </div>
-            {isAuth && <Chat />}
+            {isAuth && process.env.REACT_APP_SOCKET_URL && <Chat />}
           </main>
         </Container>
       </div>
