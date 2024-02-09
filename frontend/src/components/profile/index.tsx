@@ -19,24 +19,25 @@ export default function Profile({ data: user }: { data?: any }) {
       .then((res) => setReservations(res))
       .finally(() => setLoading(false));
   }, [data, navigate]);
+
   return (
     <ComponentLoading isLoading={loading}>
       <Col className="w-75 m-auto mb-4">
         <Row className="mb-3">
           <label htmlFor="name">Имя</label>
-          <div className="fs-5 border rounded-4" id="name">
+          <div className="fs-5" id="name">
             {data.name}
           </div>
         </Row>
         <Row className="mb-3">
           <label htmlFor="name">Email</label>
-          <div className="fs-5 border rounded-4" id="name">
+          <div className="fs-5" id="name">
             {data.email}
           </div>
         </Row>
         <Row>
           <label htmlFor="name">Телефон</label>
-          <div className="fs-5 border rounded-4" id="name">
+          <div className="fs-5" id="name">
             {data.phone}
           </div>
         </Row>
