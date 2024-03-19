@@ -45,7 +45,7 @@ export default function CardViewPage({ isRoom = false }: { isRoom?: boolean }) {
     <ComponentLoading isLoading={loading}>
       {editMode ? (
         <MyContainer>
-          <CardForm data={data} isRoom={isRoom} />
+          <CardForm data={data} isRoom={isRoom} setMode={setEditMode} />
         </MyContainer>
       ) : (
         <CardView data={data} setMode={setEditMode} isRoom={isRoom} />

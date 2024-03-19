@@ -14,7 +14,7 @@ export default function Profile({ data: user }: { data?: any }) {
 
   useLayoutEffect(() => {
     setLoading(true);
-    if (data === null) navigate("/admin/users", { replace: true });
+    if (data === null) navigate("/admin/user", { replace: true });
     getUserReservations(data._id)
       .then((res) => setReservations(res))
       .finally(() => setLoading(false));

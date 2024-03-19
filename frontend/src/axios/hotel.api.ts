@@ -1,12 +1,17 @@
 import { $host } from "./";
 export const getHotels = async ({
   name = "",
-  limit = 5,
+  limit = 10,
   offset = 0,
+  order,
 }: {
   name?: string;
   limit?: number;
   offset?: number;
+  order: {
+    from: string;
+    to: string;
+  };
 }) => {
   const { data } = await $host.get("/api/hotels", {
     params: { limit, offset, name },

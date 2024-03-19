@@ -16,7 +16,7 @@ export const signUpUser = async (
   password: string,
   phone: string
 ) => {
-  if (!name || !email || !password || !phone) return;
+  if (!name || !email || !password) return;
   const { data } = await $host.post("/auth/signup", {
     name,
     email,
@@ -26,7 +26,7 @@ export const signUpUser = async (
   return data;
 };
 export const createReservation = async (params: any) => {
-  const { data } = await $authHost.post(`/reservation`, {
+  const { data } = await $authHost.post(`/reservation/create`, {
     ...params,
   });
   return data;
@@ -34,6 +34,8 @@ export const createReservation = async (params: any) => {
 
 export const getUserReservations = async (id: String | undefined) => {
   if (!id) return;
-  const { data } = await $authHost.get(`/reservation/user/${id}`);
+  const { data } = await $authHost.get(`/reservation`, {
+    params: { userId: id },
+  });
   return data;
 };

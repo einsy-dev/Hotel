@@ -10,7 +10,7 @@ const AppRouter = ({ role }: any) => (
     <Route path="/hotel/:id" element={<CardViewPage />} />
     <Route path="/room/:id" element={<CardViewPage isRoom />} />
     <Route path="/profile" element={<ProfilePage />} />
-    {role !== "client" && AdminRouter()}
+    {role !== "client" && AdminRouter(role)}
   </Routes>
 );
 

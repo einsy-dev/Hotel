@@ -1,31 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { IReservation, ReservationDto } from './reservation.interface';
-import { Reservation } from 'src/mongo/schemas/reservation.schema';
-import { ObjectId } from 'mongoose';
+import { IReservation } from './reservation.interface';
+import { Model } from 'mongoose';
+import { ReservationDocument } from 'src/mongo/schemas/reservation.schema';
 
 @Injectable()
 export class ReservationService implements IReservation {
   constructor(
     @InjectModel('Reservation')
-    private readonly reservationModel,
+    private readonly reservationModel: Model<ReservationDocument>,
   ) {}
 
-  async addReservation(data: ReservationDto): Promise<Reservation> {
+  async addReservation(data) {
     return await new this.reservationModel(data).save();
   }
 
-  async getAllUserReservations(id: ObjectId): Promise<Reservation[]> {
-    return await this.reservationModel
-      .find({
-        userId: id,
-      })
-      .exec();
+  async getReservations(query) {
+    return await this.reservationModel.find(query).exec();
   }
-  async getAllReservations(): Promise<Reservation[]> {
-    return await this.reservationModel.find().exec();
-  }
-  async removeReservation(id: ObjectId): Promise<void> {
-    return await this.reservationModel.findByIdandDelete(id);
+
+  async removeReservation(id) {
+    await this.reservationModel.findByIdAndDelete(id);
   }
 }

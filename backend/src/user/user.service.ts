@@ -22,8 +22,18 @@ export class UserService implements IUserService {
       .select(['_id', 'name', 'email', 'phone', 'role', 'password']);
   }
 
-  async findAll() {
-    return await this.user.find();
+  async findAll({ limit, offset, name, email, phone }) {
+    return await this.user
+      .find({
+        $or: [
+          { name: { $regex: name, $options: 'i' } },
+          { email: { $regex: email, $options: 'i' } },
+          { phone: { $regex: phone, $options: 'i' } },
+        ],
+      })
+      .skip(offset)
+      .limit(limit)
+      .select(['_id', 'name', 'email', 'phone', 'role']);
   }
 
   async create({ name, email, password, phone }: any) {

@@ -15,7 +15,7 @@ export default function Pagination({
 
   const handleClick = (i: number) => {
     setActivePage(i);
-    callback();
+    callback(i);
     document.documentElement.scrollTop = 0;
   };
 
@@ -48,7 +48,7 @@ export default function Pagination({
             <li className="page-item" key={id}>
               <button
                 className={activePage === el ? "page-link active" : "page-link"}
-                onClick={() => handleClick(el)}
+                onClick={() => activePage !== el && handleClick(el)}
               >
                 {el}
               </button>

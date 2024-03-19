@@ -5,35 +5,29 @@ import {
   Get,
   Param,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { ReservationService } from './reservation.service';
 import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
-import { ObjectId } from 'mongoose';
 
 @Controller('reservation')
 export class ReservationController {
   constructor(private readonly reservationService: ReservationService) {}
-  @Get('/all')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(['manager', 'admin'])
-  async getAllReservations() {
-    return this.reservationService.getAllReservations();
-  }
 
-  @Get('/user/:id')
+  @Get()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(['client', 'manager', 'admin'])
-  async getAllUserReservations(@Param() { id }: { id: ObjectId }) {
-    return this.reservationService.getAllUserReservations(id);
+  async getReservations(@Query() query) {
+    return this.reservationService.getReservations(query);
   }
 
-  @Post()
+  @Post('create')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(['client', 'admin'])
-  async create(@Body() body: any) {
+  async create(@Body() body) {
     const data = {
       userId: body.userId,
       hotelId: body.hotelId,
@@ -47,7 +41,7 @@ export class ReservationController {
   @Delete(':id')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(['client', 'manager'])
-  async removeReservation(@Param() { id }: { id: ObjectId }) {
+  async removeReservation(@Param() { id }) {
     return this.reservationService.removeReservation(id);
   }
 }

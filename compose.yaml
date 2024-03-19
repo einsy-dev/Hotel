@@ -27,7 +27,7 @@ services:
       - 27017:27017
     networks:
       - backend
-    
+
 networks:
   backend:
     name: backend

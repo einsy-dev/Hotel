@@ -8,10 +8,18 @@ interface ReservationDto {
   dateStart: Date;
   dateEnd: Date;
 }
+
+interface ReservationSearchOptions {
+  userId: ObjectId;
+  dateStart: Date;
+  dateEnd: Date;
+}
 interface IReservation {
   addReservation(data: ReservationDto): Promise<Reservation>;
-  getAllUserReservations(id: ObjectId): Promise<Array<Reservation>>;
   removeReservation(id: ObjectId): Promise<void>;
+  getReservations(
+    filter: ReservationSearchOptions,
+  ): Promise<Array<Reservation>>;
 }
 
-export { ReservationDto, IReservation };
+export { IReservation };

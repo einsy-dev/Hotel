@@ -66,8 +66,8 @@ function Images({
         >
           <Image
             src={isLocal ? url : process.env.REACT_APP_SERVER_API + "/" + url}
-            width={200}
-            height={200}
+            width="fit-content"
+            height={150}
             className="rounded-4"
           />
 

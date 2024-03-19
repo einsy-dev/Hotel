@@ -25,8 +25,22 @@ export const updateRoom = async (
   const { data } = await $authHost.put(`/api/room/${id}`, formData);
   return data;
 };
-export const getUsers = async () => {
-  const { data } = await $authHost.get("/users");
+export const getUsers = async ({
+  limit = 10,
+  offset = 0,
+  name = "",
+  email = "",
+  phone = "",
+}: any) => {
+  const { data } = await $authHost.get("/user/all", {
+    params: {
+      limit,
+      offset,
+      name,
+      email,
+      phone,
+    },
+  });
   return data;
 };
 export const getUser = async (userId: string | undefined) => {
@@ -36,6 +50,6 @@ export const getUser = async (userId: string | undefined) => {
 };
 
 export const getAllReservations = async () => {
-  const { data } = await $authHost.get(`/reservation/all`);
+  const { data } = await $authHost.get(`/reservation`);
   return data;
 };

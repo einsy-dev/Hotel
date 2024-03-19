@@ -1,12 +1,8 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import {
-  IHotelService,
-  SearchHotelParams,
-  UpdateHotelParams,
-} from './hotel.interface';
+import { IHotelService } from './hotel.interface';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, ObjectId } from 'mongoose';
-import { Hotel, HotelDocument } from 'src/mongo/schemas/hotel.schema';
+import { Model } from 'mongoose';
+import { HotelDocument } from 'src/mongo/schemas/hotel.schema';
 import * as fs from 'fs';
 
 @Injectable()
@@ -14,27 +10,25 @@ export class HotelService implements IHotelService {
   constructor(
     @InjectModel('Hotel') private readonly hotelModel: Model<HotelDocument>,
   ) {}
-  async find(
-    params: SearchHotelParams,
-  ): Promise<{ data: Hotel[]; limit: number }> {
-    const limit = await this.hotelModel
-      .countDocuments({ name: RegExp(params.name, 'i') })
+  async find({ name, limit, offset }) {
+    const quantity = await this.hotelModel
+      .countDocuments({ name: RegExp(name, 'i') })
       .exec();
     const data = await this.hotelModel
-      .find({ name: RegExp(params.name, 'i') })
-      .skip(params.offset)
-      .limit(params.limit)
+      .find({ name: RegExp(name, 'i') })
+      .limit(limit)
+      .skip(offset)
       .exec();
-    return { data, limit };
+    return { data, limit: quantity };
   }
 
-  async findById(id: ObjectId): Promise<Hotel> {
+  async findById(id) {
     return await this.hotelModel
       .findById(id)
       .select(['_id', 'images', 'name', 'description'])
       .exec();
   }
-  async create(body: Partial<Hotel>, files: any): Promise<any> {
+  async create(body, files) {
     const { name, description } = body;
 
     if (!files) {
@@ -46,7 +40,7 @@ export class HotelService implements IHotelService {
     const images = files.map((file) => file.filename);
     return await new this.hotelModel({ images, name, description }).save();
   }
-  async update(data: UpdateHotelParams): Promise<any> {
+  async update(data) {
     const prev = await this.hotelModel.findById(data.id).select(['images']);
     const fiilesToDelete = prev.images.filter(
       (file) => !data.params.images.includes(file),
@@ -57,7 +51,7 @@ export class HotelService implements IHotelService {
         fs.rmSync(`./public/images/${file}`, { force: true });
       });
     }
-    await this.hotelModel.findByIdAndUpdate(data.id, data.params);
-    return { message: 'ok' };
+    const hotel = await this.hotelModel.findByIdAndUpdate(data.id, data.params);
+    return hotel;
   }
 }

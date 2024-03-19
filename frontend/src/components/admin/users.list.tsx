@@ -10,7 +10,7 @@ export default function Users() {
   const navigate = useNavigate();
 
   useLayoutEffect(() => {
-    getUsers()
+    getUsers({})
       .then((data) => setUsers(data))
       .then(() => setLoading(false));
   }, []);

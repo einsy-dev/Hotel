@@ -17,7 +17,12 @@ export default function AdminPage() {
           </NavLink>
         </Nav.Item>
         <Nav.Item>
-          <NavLink className={"nav-link"} to="users">
+          <NavLink className={"nav-link"} to="user/create">
+            Создать пользователя
+          </NavLink>
+        </Nav.Item>
+        <Nav.Item>
+          <NavLink className={"nav-link"} to="user">
             Пользователи
           </NavLink>
         </Nav.Item>

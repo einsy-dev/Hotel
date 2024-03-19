@@ -19,4 +19,4 @@ interface IHotelService {
   update(data: UpdateHotelParams): Promise<Hotel>;
 }
 
-export { IHotelService, SearchHotelParams, UpdateHotelParams };
+export { IHotelService };

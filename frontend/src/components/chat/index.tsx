@@ -56,7 +56,7 @@ export default function Chat() {
       newSocket.disconnect();
       setSocket(null);
     };
-  }, []);
+  }, [user._id, user.role]);
 
   return (
     <div className="position-fixed bottom-0 end-0 mb-5 me-5 d-flex flex-column align-items-end">

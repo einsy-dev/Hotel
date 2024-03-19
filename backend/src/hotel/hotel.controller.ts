@@ -11,9 +11,6 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { HotelService } from './hotel.service';
-import { ObjectId } from 'mongoose';
-import { Hotel } from 'src/mongo/schemas/hotel.schema';
-import { SearchHotelParams } from './hotel.interface';
 import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
 import { Roles } from 'src/auth/roles.decorator';
 import { RolesGuard } from 'src/auth/roles.guard';
@@ -24,11 +21,11 @@ export class HotelController {
   constructor(private readonly hotelService: HotelService) {}
 
   @Get('hotels')
-  async getHotels(@Query() query: SearchHotelParams) {
+  async getHotels(@Query() query) {
     return this.hotelService.find(query);
   }
   @Get('hotel/:id')
-  async getHotel(@Param() { id }: { id: ObjectId }) {
+  async getHotel(@Param() { id }) {
     return this.hotelService.findById(id);
   }
 
@@ -36,10 +33,7 @@ export class HotelController {
   @Roles(['admin'])
   @Post('hotel')
   @UseInterceptors(Multer)
-  async create(
-    @Body() body: Partial<Hotel>,
-    @UploadedFiles() files: any,
-  ): Promise<any> {
+  async create(@Body() body, @UploadedFiles() files) {
     return await this.hotelService.create(body, files);
   }
 
@@ -47,11 +41,7 @@ export class HotelController {
   @Roles(['admin'])
   @Put('hotel/:id')
   @UseInterceptors(Multer)
-  async update(
-    @UploadedFiles() files: any,
-    @Param() { id }: { id: ObjectId },
-    @Body() body: Partial<Hotel>,
-  ) {
+  async update(@UploadedFiles() files, @Param() { id }, @Body() body) {
     body.images = Array.from(body.images).join('').split(',');
 
     if (files) {

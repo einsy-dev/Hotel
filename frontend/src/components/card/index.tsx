@@ -2,6 +2,10 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { createReservation } from "../../axios/user.api";
 import reduxStore from "../../redux";
+import { useDispatch } from "react-redux";
+import { useState } from "react";
+import CalendarModal from "../modal/calendar";
+import useUpdateEffect from "../../utils/hooks/use.update.effect";
 
 export default function Cards({
   data,
@@ -15,21 +19,24 @@ export default function Cards({
     store: { order },
   } = reduxStore.getState();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [resAvailable, setResAvailable] = useState(false);
   async function reservation(roomId: string, hotelId: string) {
-    if (order === null) {
-      alert("Выберите даты для бронирования");
-      return;
+    if (!resAvailable) {
+      dispatch({ type: "SET_CALENDAR_MODAL", payload: { show: true } });
+      setResAvailable(true);
     }
-    createReservation({ userId: _id, roomId, hotelId, order }).then(() =>
-      navigate("/")
-    );
   }
+  useUpdateEffect(() => {
+    createReservation({ userId: _id, roomId, hotelId, order });
+  }, [resAvailable as never]);
+
   return (
     <>
       {data.map((el: any, index: number) => (
         <div
           key={index}
-          className="card shadow rounded-4 w-100 d-flex flex-row mb-4"
+          className="card shadow rounded-4 w-100 d-flex flex-row mb-4 border-0"
           style={{
             maxHeight: "300px",
             maxWidth: "max-content",
@@ -65,6 +72,7 @@ export default function Cards({
               </>
             )}
           </div>
+          <CalendarModal />
         </div>
       ))}
     </>

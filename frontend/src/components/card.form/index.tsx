@@ -8,10 +8,12 @@ export default function CardForm({
   data,
   isRoom = false,
   hotel,
+  setMode,
 }: {
   data?: any;
   isRoom?: boolean;
   hotel?: string;
+  setMode?: any;
 }) {
   const [inputFiles, setInputFiles] = useState<string[]>([]);
   const [hotelData, setHotelData] = useState({
@@ -61,6 +63,13 @@ export default function CardForm({
         }
       >
         Сохранить
+      </Button>
+      <Button
+        variant="danger"
+        className="mt-4 ms-4"
+        onClick={() => setMode(false)}
+      >
+        Отменить
       </Button>
     </>
   );

@@ -1,11 +1,8 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { Model, ObjectId } from 'mongoose';
-import {
-  HotelRoom,
-  HotelRoomDocument,
-} from 'src/mongo/schemas/hotel.room.schema';
+import { Model } from 'mongoose';
+import { HotelRoomDocument } from 'src/mongo/schemas/hotel.room.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { IRoomService, UpdateRoomsParams } from './room.interface';
+import { IRoomService } from './room.interface';
 import * as fs from 'fs';
 
 @Injectable()
@@ -15,15 +12,15 @@ export class RoomService implements IRoomService {
     private readonly hotelRoomModel: Model<HotelRoomDocument>,
   ) {}
 
-  find(id: any): Promise<HotelRoom[]> {
+  find(id) {
     return this.hotelRoomModel.find({ hotel: id }).exec();
   }
 
-  findById(id: ObjectId): Promise<HotelRoom> {
+  findById(id) {
     return this.hotelRoomModel.findById(id);
   }
 
-  async create(body: Partial<HotelRoom>, files: any): Promise<any> {
+  async create(body, files) {
     const { hotel, description } = body;
 
     if (!files) {
@@ -36,7 +33,7 @@ export class RoomService implements IRoomService {
     return await new this.hotelRoomModel({ images, description, hotel }).save();
   }
 
-  async update(data: UpdateRoomsParams): Promise<HotelRoom> {
+  async update(data) {
     const prev = await this.hotelRoomModel.findById(data.id).select(['images']);
     const fiilesToDelete = prev.images.filter(
       (file) => !data.params.images.includes(file),

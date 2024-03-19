@@ -1,8 +1,17 @@
 import { Reducer, configureStore } from "@reduxjs/toolkit";
+import moment from "moment";
 
 const mainReducer: Reducer<any, any, never[]> = (
   prevState = {
-    store: { order: null },
+    store: {
+      order: {
+        from: moment().startOf("day"),
+        to: moment().add(1, "day").startOf("day"),
+      },
+      name: "",
+      limit: 10,
+      calendarModal: { show: false },
+    },
     user: { role: "client", isAuth: false },
   },
   action: any
@@ -16,6 +25,16 @@ const mainReducer: Reducer<any, any, never[]> = (
       return {
         ...prevState,
         store: { ...prevState.store, order: payload },
+      };
+    case "SET_NAME":
+      return {
+        ...prevState,
+        store: { ...prevState.store, name: payload },
+      };
+    case "SET_CALENDAR_MODAL":
+      return {
+        ...prevState,
+        store: { ...prevState.store, calendarModal: payload },
       };
     default:
       return prevState;
