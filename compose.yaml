@@ -13,7 +13,6 @@ services:
   server:
     build: ./backend
     networks:
-      - internet
       - backend
     ports:
       - 8080:3000
@@ -32,6 +31,4 @@ networks:
   backend:
     name: backend
     driver: bridge
-  internet:
-    name: internet
-    driver: bridge
+
