@@ -5,7 +5,6 @@ import reduxStore from "../../redux";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 import CalendarModal from "../modal/calendar";
-import useUpdateEffect from "../../utils/hooks/use.update.effect";
 
 export default function Cards({
   data,
@@ -18,18 +17,20 @@ export default function Cards({
     user: { _id },
     store: { order },
   } = reduxStore.getState();
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [resAvailable, setResAvailable] = useState(false);
+
   async function reservation(roomId: string, hotelId: string) {
     if (!resAvailable) {
       dispatch({ type: "SET_CALENDAR_MODAL", payload: { show: true } });
       setResAvailable(true);
+    } else {
+      createReservation({ userId: _id, roomId, hotelId, order });
+      setResAvailable(false);
     }
   }
-  useUpdateEffect(() => {
-    createReservation({ userId: _id, roomId, hotelId, order });
-  }, [resAvailable as never]);
 
   return (
     <>

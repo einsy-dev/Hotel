@@ -56,6 +56,7 @@ function Images({
   setState: any;
   isLocal?: boolean;
 }) {
+  const [position, setPosition] = useState({ start: 0, width: 0 });
   return (
     <>
       {urls.map((url: string, i: number) => (
@@ -63,6 +64,26 @@ function Images({
           className="border position-relative rounded-4 me-4"
           style={{ width: "fit-content" }}
           key={i}
+          onDragStart={(e: any) => {
+            setPosition({
+              start: e.clientX,
+              width: e.target.width,
+            });
+          }}
+          onDragEnd={(e) => {
+            const shift = Math.round(
+              (e.clientX - position.start) / position.width
+            );
+            setState((prev: any) => {
+              let result = [...prev.images];
+              result.splice(i, 1);
+              result.splice(i + shift, 0, url);
+              return {
+                ...prev,
+                images: result,
+              };
+            });
+          }}
         >
           <Image
             src={isLocal ? url : process.env.REACT_APP_SERVER_API + "/" + url}
