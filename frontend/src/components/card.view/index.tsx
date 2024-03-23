@@ -1,9 +1,10 @@
 import { useState } from "react";
 import Carousel from "../carousel";
 import { useSelector } from "react-redux";
-import { Button } from "react-bootstrap";
-import CardForm from "../card.form";
+import { Button, Modal } from "react-bootstrap";
+import CardForm from "../forms/card.form";
 import MyContainer from "../hoc/my.container";
+import OrderForm from "../forms/order.form";
 
 export default function CardView({
   data,
@@ -14,9 +15,10 @@ export default function CardView({
   setMode?: any;
   isRoom?: boolean;
 }) {
-  const { _id, images, name, description } = data;
-  const [addRoom, setAddRoom] = useState(false);
+  const { _id, images, name, description, hotel } = data;
   const { role } = useSelector((state: any) => state.user);
+  const [addRoom, setAddRoom] = useState(false);
+  const [orderForm, setOrderForm] = useState(false);
 
   return (
     <>
@@ -34,7 +36,11 @@ export default function CardView({
             <Button className="bg-success" onClick={() => setMode(true)}>
               Редактивировать
             </Button>
-            {!isRoom && (
+            {isRoom ? (
+              <Button className="ms-4" onClick={() => setOrderForm(true)}>
+                Выбрать
+              </Button>
+            ) : (
               <Button
                 className="bg-secondary ms-4"
                 onClick={() => setAddRoom(!addRoom)}
@@ -45,6 +51,9 @@ export default function CardView({
           </div>
         )}
       </MyContainer>
+      <Modal show={orderForm} onHide={() => setOrderForm(false)}>
+        <OrderForm onHide={() => setOrderForm(false)} id={_id} hotel={hotel} />
+      </Modal>
 
       {addRoom && (
         <MyContainer>

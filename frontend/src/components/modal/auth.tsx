@@ -118,5 +118,3 @@ export default function Auth({
     </Modal>
   );
 }
-
-/* name, email, password, phone, role? */

@@ -1,10 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { Button } from "react-bootstrap";
-import { createReservation } from "../../axios/user.api";
-import reduxStore from "../../redux";
-import { useDispatch } from "react-redux";
+import { Button, Modal } from "react-bootstrap";
+import OrderForm from "../forms/order.form";
 import { useState } from "react";
-import CalendarModal from "../modal/calendar";
 
 export default function Cards({
   data,
@@ -13,24 +10,8 @@ export default function Cards({
   data: any[];
   isRoom?: boolean;
 }) {
-  const {
-    user: { _id },
-    store: { order },
-  } = reduxStore.getState();
-
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const [resAvailable, setResAvailable] = useState(false);
-
-  async function reservation(roomId: string, hotelId: string) {
-    if (!resAvailable) {
-      dispatch({ type: "SET_CALENDAR_MODAL", payload: { show: true } });
-      setResAvailable(true);
-    } else {
-      createReservation({ userId: _id, roomId, hotelId, order });
-      setResAvailable(false);
-    }
-  }
+  const [orderForm, setOrderForm] = useState(false);
 
   return (
     <>
@@ -62,18 +43,22 @@ export default function Cards({
             ) : (
               <>
                 <Button
-                  onClick={() => navigate("/room/" + el._id, { state: el })}
+                  onClick={() => navigate("/room/" + el._id)}
                   className="me-4"
                 >
                   Подробнее
                 </Button>
-                <Button onClick={() => reservation(el._id, el.hotel)}>
-                  Выбрать
-                </Button>
+                <Button onClick={() => setOrderForm(true)}>Выбрать</Button>
               </>
             )}
           </div>
-          <CalendarModal />
+          <Modal show={orderForm} onHide={() => setOrderForm(false)}>
+            <OrderForm
+              onHide={() => setOrderForm(false)}
+              id={el._id}
+              hotel={el.hotel}
+            />
+          </Modal>
         </div>
       ))}
     </>

@@ -1,10 +1,10 @@
 import { Container, Form } from "react-bootstrap";
-import { format } from "../../utils/date.format";
+import { format } from "../../../utils/date.format";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useRef } from "react";
 import { debounceTime, distinctUntilChanged, fromEvent } from "rxjs";
 
-export default function SearchForm({ search }: any) {
+export default function SearchForm({ search, calendar }: any) {
   const { order, name } = useSelector((state: any) => state.store);
   const dispatch = useDispatch();
   const inputRef = useRef<any>();
@@ -40,9 +40,7 @@ export default function SearchForm({ search }: any) {
 
       <div
         className=" d-flex justify-content-center user-select-none mt-3"
-        onClick={() =>
-          dispatch({ type: "SET_CALENDAR_MODAL", payload: { show: true } })
-        }
+        onClick={() => calendar(true)}
       >
         <div className="border form-control text-center">
           {format(order.from)}

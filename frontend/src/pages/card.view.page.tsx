@@ -1,4 +1,4 @@
-import CardForm from "../components/card.form";
+import CardForm from "../components/forms/card.form";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getHotel } from "../axios/hotel.api";

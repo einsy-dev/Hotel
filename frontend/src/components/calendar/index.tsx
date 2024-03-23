@@ -1,29 +1,18 @@
 import moment from "moment";
 import { useState } from "react";
-import { Button, Container, Modal, Row } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import { Button, Container, Row } from "react-bootstrap";
 import calendarIterator from "../../utils/calendar.iterator";
+import { useDispatch, useSelector } from "react-redux";
 
-export default function CalendarModal() {
-  const {
-    order,
-    calendarModal: { show },
-  } = useSelector((state: any) => state.store);
-
+export default function Calendar({ onHide }: any) {
   const [date, setDate] = useState(moment().startOf("month"));
+  const { order } = useSelector((state: any) => state.store);
   const [newOrder, setNewOrder] = useState(order);
-
+  const arr = calendarIterator(date);
   const dispatch = useDispatch();
 
-  const arr = calendarIterator(date);
-
   return (
-    <Modal
-      show={show}
-      onHide={() =>
-        dispatch({ type: "SET_CALENDAR_MODAL", payload: { show: false } })
-      }
-    >
+    <>
       <div className="p-3 d-flex justify-content-between w-50 m-auto">
         <Button
           variant="secondary"
@@ -80,16 +69,13 @@ export default function CalendarModal() {
           <Button
             onClick={() => {
               dispatch({ type: "ORDER", payload: newOrder });
-              dispatch({
-                type: "SET_CALENDAR_MODAL",
-                payload: { show: false },
-              });
+              onHide();
             }}
           >
-            OK
+            Выбрать
           </Button>
         </div>
       </Container>
-    </Modal>
+    </>
   );
 }

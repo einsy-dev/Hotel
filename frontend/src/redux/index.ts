@@ -10,7 +10,6 @@ const mainReducer: Reducer<any, any, never[]> = (
       },
       name: "",
       limit: 10,
-      calendarModal: { show: false },
     },
     user: { role: "client", isAuth: false },
   },
@@ -30,11 +29,6 @@ const mainReducer: Reducer<any, any, never[]> = (
       return {
         ...prevState,
         store: { ...prevState.store, name: payload },
-      };
-    case "SET_CALENDAR_MODAL":
-      return {
-        ...prevState,
-        store: { ...prevState.store, calendarModal: payload },
       };
     default:
       return prevState;

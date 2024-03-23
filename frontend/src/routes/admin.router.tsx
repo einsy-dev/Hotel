@@ -1,10 +1,10 @@
 import { Route } from "react-router-dom";
 import AllReservations from "../components/admin/reservations";
 import Users from "../components/admin/users.list";
-import CardForm from "../components/card.form";
+import CardForm from "../components/forms/card.form";
 import Profile from "../components/profile";
 import AdminPage from "../pages/admin.page";
-import UserForm from "../components/user.form";
+import UserForm from "../components/forms/user.form";
 
 export const AdminRouter = ({ role }: any) => (
   <Route path="admin" element={<AdminPage />}>

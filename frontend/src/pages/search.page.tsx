@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { getHotels } from "../axios/hotel.api";
 import Cards from "../components/card";
-import SearchForm from "../components/search.form";
+import SearchForm from "../components/forms/search.form";
 import ComponentLoading from "../components/hoc/component.loading";
 import Pagination from "../components/pagination";
 import { useSelector } from "react-redux";
-import CalendarModal from "../components/modal/calendar";
+import { Modal } from "react-bootstrap";
+import Calendar from "../components/calendar";
 
 export default function SearchPage({ all = false }: { all?: boolean }) {
   const { name, limit, order } = useSelector((state: any) => state.store); // this limit is for req items quantity
@@ -14,6 +15,7 @@ export default function SearchPage({ all = false }: { all?: boolean }) {
     limit: 0, // for pagination only
   });
   const [loading, setLoading] = useState(false);
+  const [calendar, setCalendar] = useState(false);
 
   function startSearching(page: number = 1) {
     if (name.trim() === "" && !all) return;
@@ -30,11 +32,16 @@ export default function SearchPage({ all = false }: { all?: boolean }) {
   }, [all]);
   return (
     <>
-      <SearchForm search={startSearching} />
-      <CalendarModal />
+      <SearchForm search={startSearching} calendar={setCalendar} />
+
+      <Modal show={calendar} onHide={() => setCalendar(false)}>
+        <Calendar onHide={() => setCalendar(false)} />
+      </Modal>
+
       <ComponentLoading isLoading={loading}>
         <Cards data={hotels.data} />
       </ComponentLoading>
+
       {!loading && Math.ceil(hotels.limit / limit) <= 1 ? null : (
         <Pagination
           limit={Math.ceil(hotels.limit / limit)}

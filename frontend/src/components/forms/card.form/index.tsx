@@ -2,7 +2,7 @@ import { useState } from "react";
 import InputImages from "./input.images";
 import { Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import saveCard from "../../utils/save.card";
+import saveCard from "../../../utils/save.card";
 
 export default function CardForm({
   data,

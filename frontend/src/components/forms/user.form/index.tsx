@@ -1,5 +1,5 @@
 import { Button, Form } from "react-bootstrap";
-import { signUpUser } from "../../axios/user.api";
+import { signUpUser } from "../../../axios/user.api";
 import { FormEvent, useState } from "react";
 
 export default function UserForm() {
