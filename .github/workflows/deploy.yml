@@ -1,8 +1,8 @@
 name: Deploy client to server
 
 env:
-  SERVER_DIR: ~/app/servers/hotel
   CLIENT_DIR: ~/app/nginx/www/html/hotel
+  SERVER_DIR: ~/app/servers/hotel
 
 on:
   push:
@@ -36,6 +36,7 @@ jobs:
           target: ${{ env.CLIENT_DIR }}
 
   deploy_server:
+    needs: deploy_client
     runs-on: ubuntu-latest
 
     steps:
