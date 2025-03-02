@@ -1,0 +1,15 @@
+services:
+  hotel:
+    build: .
+    ports:
+      - 8001:8000
+    networks:
+      - backend
+    volumes:
+      - ~/app/volumes/hotel:/app
+
+networks:
+  backend:
+    name: backend
+    external: true
+      

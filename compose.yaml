@@ -20,12 +20,6 @@ services:
       - mongodb
     env_file:
       - ./env-list
-  mongodb:
-    image: mongo:4.4
-    ports:
-      - 27017:27017
-    networks:
-      - backend
 
 networks:
   backend:

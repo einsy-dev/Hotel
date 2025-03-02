@@ -1,0 +1,78 @@
+name: Deploy client to server
+
+env:
+  SERVER_DIR: ~/app/servers/hotel
+  CLIENT_DIR: ~/app/nginx/www/html/hotel
+
+on:
+  push:
+    branches: ["release"]
+  pull_request:
+    branches: ["release"]
+
+jobs:
+  deploy_client:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+
+      - run: cd frontend && npm i && npm run build
+
+      - name: Deploy client to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          strip_components: 2
+          source: frontend/build/
+          target: ${{ env.CLIENT_DIR }}
+
+  deploy_server:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Upload to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          strip_components: 1
+          source: "backend/"
+          target: "${{ env.SERVER_DIR }}"
+
+      - name: Setup .env
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd ${{ env.SERVER_DIR }}
+            rm -f .env && touch .env
+            echo "MONGO_DB=${{ secrets.MONGO_DB }}" >> .env
+            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd ${{ env.SERVER_DIR }}
+            if [ -f "docker-compose.yml" ]; then
+              sudo docker compose down --remove-orphans
+              sudo docker compose up -d --build
+            fi
