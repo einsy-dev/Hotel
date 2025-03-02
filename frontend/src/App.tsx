@@ -25,7 +25,7 @@ function App() {
       .catch(() => {
         console.log("Авторизация не выполнена");
       });
-  });
+  }, []);
 
   return (
     <ComponentLoading isLoading={isLoadind}>
