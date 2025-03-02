@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import AppRouter from "./routes/app.router";
 import { NavLink } from "react-router-dom";
 import Container from "react-bootstrap/Container";
@@ -24,7 +25,7 @@ function App() {
       .catch(() => {
         console.log("Авторизация не выполнена");
       });
-  }, []);
+  });
 
   return (
     <ComponentLoading isLoading={isLoadind}>

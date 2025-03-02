@@ -1,7 +1,6 @@
 {
   "name": "frontend",
   "version": "0.1.0",
-  "private": true,
   "license": "MIT",
   "dependencies": {
     "@reduxjs/toolkit": "^2.0.1",
@@ -27,9 +26,7 @@
   "scripts": {
     "start": "react-scripts start",
     "start:dev": "react-scripts start --watch-all",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "build": "react-scripts build"
   },
   "eslintConfig": {
     "extends": [
